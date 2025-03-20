@@ -107,10 +107,10 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
                 $className = self::COMPONENT_MAP[$type];
 
                 $arguments = $componentConfig['arguments'];
-                $modifiedArguments = array_combine(
-                    array_map(static fn ($key) => '$' . $key, array_keys($arguments)),
-                    array_values($arguments)
-                );
+                $modifiedArguments = [];
+                foreach ($arguments as $key => $value) {
+                    $modifiedArguments['$' . $key] = $value;
+                }
 
                 $definition = new Definition($className);
                 $definition->setArguments($modifiedArguments);
