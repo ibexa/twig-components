@@ -8,9 +8,17 @@ declare(strict_types=1);
 
 namespace Ibexa\Bundle\TwigComponents\DependencyInjection;
 
+use Ibexa\Bundle\TwigComponents\DependencyInjection\Compiler\ComponentPass;
+use Ibexa\Contracts\TwigComponents\Exception\InvalidArgumentException;
+use Ibexa\TwigComponents\Component\ControllerComponent;
+use Ibexa\TwigComponents\Component\HtmlComponent;
+use Ibexa\TwigComponents\Component\LinkComponent;
+use Ibexa\TwigComponents\Component\ScriptComponent;
+use Ibexa\TwigComponents\Component\TwigComponent;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -18,6 +26,16 @@ use Symfony\Component\Yaml\Yaml;
 
 final class IbexaTwigComponentsExtension extends Extension implements PrependExtensionInterface
 {
+    public const COMPONENT_MAP = [
+        'script' => ScriptComponent::class,
+        'stylesheet' => LinkComponent::class,
+        'template' => TwigComponent::class,
+        'controller' => ControllerComponent::class,
+        'html' => HtmlComponent::class,
+    ];
+
+    public const EXTENSION_NAME = 'ibexa_twig_components';
+
     /**
      * @param array<string, mixed> $configs
      */
@@ -35,6 +53,9 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
             $loader->load('test/components.yaml');
             $loader->load('test/contexts.yaml');
         }
+
+        $configuration = $this->processConfiguration(new Configuration(), $configs);
+        $this->registerConfiguredComponents($configuration, $container);
     }
 
     public function prepend(ContainerBuilder $container): void
@@ -59,7 +80,7 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
     {
         $container->prependExtensionConfig('jms_translation', [
             'configs' => [
-                'ibexa_twig_components' => [
+                self::EXTENSION_NAME => [
                     'dirs' => [
                         __DIR__ . '/../../',
                     ],
@@ -75,5 +96,40 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
     {
         return $container->hasParameter('ibexa.behat.browser.enabled')
             && true === $container->getParameter('ibexa.behat.browser.enabled');
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    private function registerConfiguredComponents(array $config, ContainerBuilder $container): void
+    {
+        foreach ($config as $group => $components) {
+            foreach ($components as $name => $componentConfig) {
+                $type = $componentConfig['type'] ?? null;
+                if (!isset(self::COMPONENT_MAP[$type])) {
+                    throw new InvalidArgumentException(
+                        $type,
+                        sprintf('Invalid component type "%s" for component "%s"', $type, $name)
+                    );
+                }
+                $className = self::COMPONENT_MAP[$type];
+
+                $arguments = $componentConfig['arguments'];
+                $modifiedArguments = [];
+                foreach ($arguments as $key => $value) {
+                    $modifiedArguments['$' . $key] = $value;
+                }
+
+                $definition = new Definition($className);
+                $definition->setArguments($modifiedArguments);
+                $definition->setLazy(true);
+                $definition->setAutowired(true);
+                $definition->setAutoconfigured(true);
+                $definition->setPublic(false);
+                $definition->addTag(ComponentPass::TAG_NAME, ['group' => $group]);
+
+                $container->setDefinition($name, $definition);
+            }
+        }
     }
 }
