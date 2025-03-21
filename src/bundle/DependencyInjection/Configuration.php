@@ -28,10 +28,14 @@ final class Configuration implements ConfigurationInterface
                             ->isRequired()
                             ->validate()
                                 ->ifNotInArray(array_keys(IbexaTwigComponentsExtension::COMPONENT_MAP))
-                                ->thenInvalid('Invalid type "%s". Allowed types: script, stylesheet, template, controller, html')
+                                ->thenInvalid(sprintf(
+                                    'Invalid type "%%s". Allowed types: %s',
+                                    implode(', ', array_keys(IbexaTwigComponentsExtension::COMPONENT_MAP))
+                                ))
                             ->end()
                         ->end()
                         ->arrayNode('arguments')
+                        ->isRequired()
                             ->normalizeKeys(false)
                             ->variablePrototype()->end()
                         ->end()
