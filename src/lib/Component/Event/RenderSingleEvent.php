@@ -32,9 +32,9 @@ final class RenderSingleEvent extends Event
      */
     public function __construct(
         Registry $registry,
-        string   $groupName,
-        string   $serviceId,
-        array    $parameters = [],
+        string $groupName,
+        string $serviceId,
+        array $parameters = [],
     ) {
         $this->registry = $registry;
         $this->groupName = $groupName;

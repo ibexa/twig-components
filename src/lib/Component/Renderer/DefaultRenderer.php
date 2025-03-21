@@ -17,9 +17,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class DefaultRenderer implements RendererInterface
 {
-    protected Registry $registry;
+    private Registry $registry;
 
-    protected EventDispatcherInterface $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     public function __construct(Registry $registry, EventDispatcherInterface $eventDispatcher)
     {

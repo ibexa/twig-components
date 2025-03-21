@@ -15,7 +15,7 @@ final class Registry
     /**
      * @var array<string, array<\Ibexa\Contracts\TwigComponents\ComponentInterface>>
      */
-    protected array $components;
+    private array $components;
 
     /**
      * @param array<string, array<\Ibexa\Contracts\TwigComponents\ComponentInterface>> $components

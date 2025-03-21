@@ -46,7 +46,8 @@ class LinkComponent implements ComponentInterface
      */
     public function render(array $parameters = []): string
     {
-        return $this->twig->render('@ibexadesign/link.html.twig',
+        return $this->twig->render(
+            '@ibexadesign/link.html.twig',
             array_merge(
                 [
                     'href' => $this->href,
