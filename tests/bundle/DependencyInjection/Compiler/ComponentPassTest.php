@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class ComponentPassTest extends AbstractCompilerPassTestCase
+final class ComponentPassTest extends AbstractCompilerPassTestCase
 {
     protected function setUp(): void
     {
