@@ -9,7 +9,12 @@ declare(strict_types=1);
 namespace Ibexa\Bundle\TwigComponents\DependencyInjection;
 
 use Ibexa\Bundle\TwigComponents\DependencyInjection\Compiler\ComponentPass;
-use Ibexa\TwigComponents\Exception\InvalidArgumentException;
+use Ibexa\Contracts\TwigComponents\Exception\InvalidArgumentException;
+use Ibexa\TwigComponents\Component\ControllerComponent;
+use Ibexa\TwigComponents\Component\HtmlComponent;
+use Ibexa\TwigComponents\Component\LinkComponent;
+use Ibexa\TwigComponents\Component\ScriptComponent;
+use Ibexa\TwigComponents\Component\TwigComponent;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,12 +26,12 @@ use Symfony\Component\Yaml\Yaml;
 
 final class IbexaTwigComponentsExtension extends Extension implements PrependExtensionInterface
 {
-    private const COMPONENT_MAP = [
-        'script' => 'Ibexa\TwigComponents\Component\ScriptComponent',
-        'stylesheet' => 'Ibexa\TwigComponents\Component\LinkComponent',
-        'template' => 'Ibexa\TwigComponents\Component\TwigComponent',
-        'controller' => 'Ibexa\TwigComponents\Component\ControllerComponent',
-        'html' => 'Ibexa\TwigComponents\Component\HtmlComponent',
+    public const COMPONENT_MAP = [
+        'script' => ScriptComponent::class,
+        'stylesheet' => LinkComponent::class,
+        'template' => TwigComponent::class,
+        'controller' => ControllerComponent::class,
+        'html' => HtmlComponent::class,
     ];
 
     public const EXTENSION_NAME = 'ibexa_twig_components';
@@ -102,7 +107,10 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
             foreach ($components as $name => $componentConfig) {
                 $type = $componentConfig['type'] ?? null;
                 if (!isset(self::COMPONENT_MAP[$type])) {
-                    throw new InvalidArgumentException($type, sprintf('Invalid component type "%s" for component "%s"', $type, $name));
+                    throw new InvalidArgumentException(
+                        $type,
+                        sprintf('Invalid component type "%s" for component "%s"', $type, $name)
+                    );
                 }
                 $className = self::COMPONENT_MAP[$type];
 
@@ -115,6 +123,9 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
                 $definition = new Definition($className);
                 $definition->setArguments($modifiedArguments);
                 $definition->setLazy(true);
+                $definition->setAutowired(true);
+                $definition->setAutoconfigured(true);
+                $definition->setPublic(false);
                 $definition->addTag(ComponentPass::TAG_NAME, ['group' => $group]);
 
                 $container->setDefinition($name, $definition);

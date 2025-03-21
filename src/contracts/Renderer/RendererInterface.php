@@ -11,14 +11,14 @@ namespace Ibexa\Contracts\TwigComponents\Renderer;
 interface RendererInterface
 {
     /**
-     * @param array<mixed>  $parameters
+     * @param array<mixed> $parameters
      *
      * @return string[]
      */
     public function renderGroup(string $groupName, array $parameters = []): array;
 
     /**
-     * @param array<mixed>  $parameters
+     * @param array<mixed> $parameters
      */
     public function renderSingle(string $groupName, string $name, array $parameters = []): string;
 }

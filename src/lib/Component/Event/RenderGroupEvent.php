@@ -11,7 +11,7 @@ namespace Ibexa\TwigComponents\Component\Event;
 use Ibexa\TwigComponents\Component\Registry;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class RenderGroupEvent extends Event
+final class RenderGroupEvent extends Event
 {
     public const NAME = 'ibexa_twig_components.render_group';
 

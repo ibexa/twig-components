@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Ibexa\Bundle\TwigComponents\DependencyInjection\Compiler;
 
+use Ibexa\Contracts\TwigComponents\Exception\InvalidArgumentException;
 use Ibexa\TwigComponents\Component\Registry;
-use Ibexa\TwigComponents\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ComponentPass implements CompilerPassInterface
+final class ComponentPass implements CompilerPassInterface
 {
     use PriorityTaggedServiceTrait;
 
@@ -36,7 +36,10 @@ class ComponentPass implements CompilerPassInterface
 
             foreach ($tags as $tag) {
                 if (!isset($tag['group'])) {
-                    throw new InvalidArgumentException($id, 'Tag ' . self::TAG_NAME . ' must contain a "group" argument.');
+                    throw new InvalidArgumentException(
+                        $id,
+                        'Tag ' . self::TAG_NAME . ' must contain a "group" argument.',
+                    );
                 }
                 $id = $tag['id'] ?? $id;
                 $registryDefinition->addMethodCall('addComponent', [$tag['group'], $id, $serviceReference]);

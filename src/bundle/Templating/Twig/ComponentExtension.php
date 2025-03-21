@@ -13,7 +13,7 @@ use Ibexa\TwigComponents\Component\Registry as ComponentRegistry;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-class ComponentExtension extends AbstractExtension
+final class ComponentExtension extends AbstractExtension
 {
     protected ComponentRegistry $registry;
 
@@ -46,13 +46,17 @@ class ComponentExtension extends AbstractExtension
         ];
     }
 
-    /** @param array<mixed> $parameters */
+    /**
+     * @param array<mixed> $parameters
+     */
     public function renderComponentGroup(string $group, array $parameters = []): string
     {
         return implode('', $this->renderer->renderGroup($group, $parameters));
     }
 
-    /** @param array<mixed> $parameters */
+    /**
+     * @param array<mixed> $parameters
+     */
     public function renderComponent(string $group, string $id, array $parameters = []): string
     {
         return $this->renderer->renderSingle($group, $id, $parameters);

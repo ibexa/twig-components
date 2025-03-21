@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace Ibexa\TwigComponents\Component\Renderer;
 
+use Ibexa\Contracts\TwigComponents\Exception\InvalidArgumentException;
 use Ibexa\Contracts\TwigComponents\Renderer\RendererInterface;
 use Ibexa\TwigComponents\Component\Event\RenderGroupEvent;
 use Ibexa\TwigComponents\Component\Event\RenderSingleEvent;
 use Ibexa\TwigComponents\Component\Registry;
-use Ibexa\TwigComponents\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class DefaultRenderer implements RendererInterface
+final class DefaultRenderer implements RendererInterface
 {
     protected Registry $registry;
 
@@ -28,7 +28,7 @@ class DefaultRenderer implements RendererInterface
     }
 
     /**
-     * @param array<mixed>  $parameters
+     * @param array<mixed> $parameters
      *
      * @return string[]
      */
@@ -51,7 +51,7 @@ class DefaultRenderer implements RendererInterface
     }
 
     /**
-     * @param array<mixed>  $parameters
+     * @param array<mixed> $parameters
      */
     public function renderSingle(string $groupName, string $name, array $parameters = []): string
     {
@@ -65,7 +65,10 @@ class DefaultRenderer implements RendererInterface
         $components = $this->registry->getComponents($groupName);
 
         if (!isset($components[$name])) {
-            throw new InvalidArgumentException('id', sprintf("Can't find Component '%s' in group '%s'", $name, $groupName));
+            throw new InvalidArgumentException(
+                'id',
+                sprintf("Can't find Component '%s' in group '%s'", $name, $groupName),
+            );
         }
 
         return $components[$name]->render($parameters);

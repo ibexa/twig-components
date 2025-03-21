@@ -11,7 +11,7 @@ namespace Ibexa\Bundle\TwigComponents\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
@@ -27,7 +27,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('type')
                             ->isRequired()
                             ->validate()
-                                ->ifNotInArray(['script', 'stylesheet', 'template', 'controller', 'html'])
+                                ->ifNotInArray(array_keys(IbexaTwigComponentsExtension::COMPONENT_MAP))
                                 ->thenInvalid('Invalid type "%s". Allowed types: script, stylesheet, template, controller, html')
                             ->end()
                         ->end()

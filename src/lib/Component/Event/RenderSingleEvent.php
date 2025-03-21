@@ -12,7 +12,7 @@ use Ibexa\Contracts\TwigComponents\ComponentInterface;
 use Ibexa\TwigComponents\Component\Registry;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class RenderSingleEvent extends Event
+final class RenderSingleEvent extends Event
 {
     public const NAME = 'ibexa_twig_components.render_single';
 
@@ -30,8 +30,12 @@ class RenderSingleEvent extends Event
     /**
      * @param array<mixed> $parameters
      */
-    public function __construct(Registry $registry, string $groupName, string $serviceId, array $parameters = [])
-    {
+    public function __construct(
+        Registry $registry,
+        string   $groupName,
+        string   $serviceId,
+        array    $parameters = [],
+    ) {
         $this->registry = $registry;
         $this->groupName = $groupName;
         $this->serviceId = $serviceId;

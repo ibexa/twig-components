@@ -10,7 +10,7 @@ namespace Ibexa\TwigComponents\Component;
 
 use Ibexa\Contracts\TwigComponents\ComponentInterface;
 
-class Registry
+final class Registry
 {
     /**
      * @var array<string, array<\Ibexa\Contracts\TwigComponents\ComponentInterface>>

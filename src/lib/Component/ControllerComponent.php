@@ -51,9 +51,11 @@ class ControllerComponent implements ComponentInterface
             throw new \LogicException('No current request found in RequestStack. Ensure that this component is used within an HTTP request context.');
         }
 
-        $attributes = [
-                '_controller' => $this->controller,
-            ] + $this->parameters + $parameters;
+        $attributes = array_merge(
+            ['_controller' => $this->controller],
+            $this->parameters,
+            $parameters
+        );
 
         $subRequest = $request->duplicate([], null, $attributes);
         $response = $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);

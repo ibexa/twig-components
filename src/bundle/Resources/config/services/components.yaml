@@ -9,8 +9,6 @@ services:
     Ibexa\TwigComponents\Component\TwigComponent:
         abstract: true
         lazy: true
-        arguments:
-            $parameters: []
 
     Ibexa\TwigComponents\Component\ScriptComponent:
         abstract: true
@@ -23,9 +21,7 @@ services:
     Ibexa\TwigComponents\Component\ControllerComponent:
         abstract: true
         lazy: true
-        arguments:
-            $parameters: [ ]
-            
+        
     Ibexa\TwigComponents\Component\HtmlComponent:
         abstract: true
         lazy: true
