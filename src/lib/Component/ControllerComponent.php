@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Ibexa\TwigComponents\Component;
 
 use Ibexa\Contracts\TwigComponents\ComponentInterface;
+use LogicException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -20,9 +21,7 @@ class ControllerComponent implements ComponentInterface
 
     private string $controller;
 
-    /**
-     * @var array<mixed>
-     */
+    /** @var array<mixed> */
     private array $parameters;
 
     /**
@@ -48,7 +47,9 @@ class ControllerComponent implements ComponentInterface
         $request = $this->requestStack->getCurrentRequest();
 
         if ($request === null) {
-            throw new \LogicException('No current request found in RequestStack. Ensure that this component is used within an HTTP request context.');
+            throw new LogicException(
+                'No current request found in RequestStack. Ensure that this component is used within an HTTP request context.'
+            );
         }
 
         $attributes = array_merge(

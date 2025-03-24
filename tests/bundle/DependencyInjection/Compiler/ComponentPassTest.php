@@ -56,7 +56,13 @@ final class ComponentPassTest extends AbstractCompilerPassTestCase
         $taggedServiceId = 'collected_service';
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('Argument \'%s\' is invalid: Tag %s must contain a "group" argument.', $taggedServiceId, ComponentPass::TAG_NAME));
+        $this->expectExceptionMessage(
+            sprintf(
+                'Argument \'%s\' is invalid: Tag %s must contain a "group" argument.',
+                $taggedServiceId,
+                ComponentPass::TAG_NAME,
+            )
+        );
 
         $collectedService = new Definition();
         $collectedService->addTag(ComponentPass::TAG_NAME);

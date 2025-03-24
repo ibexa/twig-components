@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Ibexa\Tests\Bundle\TwigComponents\DependencyInjection;
 
 use Ibexa\Bundle\TwigComponents\DependencyInjection\IbexaTwigComponentsExtension;
+use Ibexa\TwigComponents\Component\TwigComponent;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
@@ -33,7 +34,7 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
             ],
         ]);
 
-        self::assertContainerBuilderHasService('test_component', 'Ibexa\TwigComponents\Component\TwigComponent');
+        self::assertContainerBuilderHasService('test_component', TwigComponent::class);
         self::assertContainerBuilderHasServiceDefinitionWithTag(
             'test_component',
             'ibexa.twig.component',
@@ -55,7 +56,9 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
     public function testInvalidComponentTypeThrowsException(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessage('Unrecognized option "invalid_component" under "ibexa_twig_components.ibexa_twig_components.invalid_group');
+        $this->expectExceptionMessage(
+            'Unrecognized option "invalid_component" under "ibexa_twig_components.ibexa_twig_components.invalid_group'
+        );
 
         $this->load([
             'ibexa_twig_components' => [

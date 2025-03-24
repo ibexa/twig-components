@@ -155,6 +155,13 @@ final class ConfigurationTest extends TestCase
                     ],
                 ],
             ],
+            'empty configuration' => [
+                [
+                    'ibexa_twig_components' => [
+                    ],
+                ],
+                [],
+            ],
         ];
     }
 
