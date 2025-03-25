@@ -1,0 +1,38 @@
+{% if collector.renderedComponents is not empty %}
+    <div class="sf-toolbar-info-piece">
+        <b>Rendered Twig Components</b>
+    </div>
+    <div class="sf-toolbar-info-piece">
+        <table>
+            <thead>
+            <tr>
+                <th>Group</th>
+                <th>Component</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for component in collector.renderedComponents %}
+                <tr>
+                    <td>
+                        <span class="sf-toolbar-status sf-toolbar-status-green">{{ component.group }}</span>
+                    </td>
+                    <td>
+                        <span class="sf-toolbar-status sf-toolbar-status-green">{{ component.name }}</span>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+{% if collector.availableGroups is not empty %}
+    <div class="sf-toolbar-info-piece">
+        <b>Available Twig Component Groups</b>
+    </div>
+    <div class="sf-toolbar-info-piece">
+        {% for group in collector.availableGroups %}
+            <span class="sf-toolbar-status sf-toolbar-status-green">{{ group.group }}</span>
+        {% endfor %}
+    </div>
+{% endif %}

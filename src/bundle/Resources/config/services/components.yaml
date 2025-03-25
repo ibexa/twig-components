@@ -29,7 +29,16 @@ services:
     Ibexa\Bundle\TwigComponents\Templating\Twig\ComponentExtension:
         tags:
             - { name: twig.extension }
-
+    
+    Ibexa\Bundle\TwigComponents\DataCollector\TwigComponentCollector:
+        tags:
+            -   name: ibexa.debug.data_collector
+                id: "ibexa.twig_components"
+                panelTemplate: '@IbexaTwigComponents/profiler/panel.html.twig'
+                toolbarTemplate: '@IbexaTwigComponents/profiler/toolbar.html.twig'
+                priority: 150
+    
+    
     Ibexa\TwigComponents\Component\Renderer\DefaultRenderer:
 
     Ibexa\Contracts\TwigComponents\Renderer\RendererInterface: '@Ibexa\TwigComponents\Component\Renderer\DefaultRenderer'
