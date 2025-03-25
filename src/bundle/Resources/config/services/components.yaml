@@ -30,7 +30,7 @@ services:
         tags:
             - { name: twig.extension }
     
-    Ibexa\Bundle\TwigComponents\DataCollector\TwigComponentCollector:
+    Ibexa\TwigComponents\DataCollector\TwigComponentCollector:
         tags:
             -   name: ibexa.debug.data_collector
                 id: "ibexa.twig_components"

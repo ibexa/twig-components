@@ -2,19 +2,27 @@
 
 /**
  * @copyright Copyright (C) Ibexa AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
+declare(strict_types=1);
+
+/**
+ * @copyright Copyright (C) Ibexa AS. All rights reserved.
  * @license   For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace Ibexa\Bundle\TwigComponents\DataCollector;
+namespace Ibexa\TwigComponents\DataCollector;
 
-use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
 class TwigComponentCollector extends DataCollector
 {
+    /** @var array<int, mixed> */
     private array $renderedComponents = [];
 
+    /** @var array<int, mixed> */
     private array $availableGroups = [];
 
     public function addRenderedComponent(string $group, string $name): void
@@ -39,11 +47,17 @@ class TwigComponentCollector extends DataCollector
         $this->data = [];
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getRenderedComponents(): array
     {
         return $this->data['rendered_components'] ?? [];
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getAvailableGroups(): array
     {
         return $this->data['available_groups'] ?? [];
