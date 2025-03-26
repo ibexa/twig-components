@@ -37,11 +37,9 @@ services:
                 panelTemplate: '@IbexaTwigComponents/profiler/panel.html.twig'
                 priority: 150
     
-    Ibexa\TwigComponents\Component\EventListener\TwigComponentCollectorListener:
+    Ibexa\TwigComponents\Component\EventListener\TwigComponentCollectorSubscriber:
         tags:
-            - { name: kernel.event_listener, event: ibexa_twig_components.render_group, method: onRenderGroup }
-            - { name: kernel.event_listener, event: ibexa_twig_components.render_single, method: onRenderSingle }
-    
+            - { name: kernel.event_subscriber }
     
     Ibexa\TwigComponents\Component\Renderer\DefaultRenderer:
 

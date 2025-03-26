@@ -11,14 +11,23 @@ namespace Ibexa\TwigComponents\Component\EventListener;
 use Ibexa\TwigComponents\Component\Event\RenderGroupEvent;
 use Ibexa\TwigComponents\Component\Event\RenderSingleEvent;
 use Ibexa\TwigComponents\DataCollector\TwigComponentCollector;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class TwigComponentCollectorListener
+final class TwigComponentCollectorSubscriber implements EventSubscriberInterface
 {
     private TwigComponentCollector $collector;
 
     public function __construct(TwigComponentCollector $collector)
     {
         $this->collector = $collector;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            RenderGroupEvent::NAME => ['onRenderGroup', 50],
+            RenderSingleEvent::NAME => ['onRenderSingle', 50],
+        ];
     }
 
     public function onRenderGroup(RenderGroupEvent $event): void
