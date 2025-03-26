@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Ibexa\TwigComponents\Component\Renderer;
 
-use Ibexa\Bundle\TwigComponents\DataCollector\TwigComponentCollector;
 use Ibexa\Contracts\TwigComponents\Exception\InvalidArgumentException;
 use Ibexa\Contracts\TwigComponents\Renderer\RendererInterface;
 use Ibexa\TwigComponents\Component\Event\RenderGroupEvent;
@@ -21,8 +20,6 @@ final class DefaultRenderer implements RendererInterface
     private Registry $registry;
 
     private EventDispatcherInterface $eventDispatcher;
-
-    private TwigComponentCollector $collector;
 
     public function __construct(
         Registry $registry,
