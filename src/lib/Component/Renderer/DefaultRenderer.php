@@ -13,7 +13,6 @@ use Ibexa\Contracts\TwigComponents\Renderer\RendererInterface;
 use Ibexa\TwigComponents\Component\Event\RenderGroupEvent;
 use Ibexa\TwigComponents\Component\Event\RenderSingleEvent;
 use Ibexa\TwigComponents\Component\Registry;
-use Ibexa\TwigComponents\DataCollector\TwigComponentCollector;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class DefaultRenderer implements RendererInterface
@@ -22,16 +21,12 @@ final class DefaultRenderer implements RendererInterface
 
     private EventDispatcherInterface $eventDispatcher;
 
-    private TwigComponentCollector $collector;
-
     public function __construct(
         Registry $registry,
         EventDispatcherInterface $eventDispatcher,
-        TwigComponentCollector $collector
     ) {
         $this->registry = $registry;
         $this->eventDispatcher = $eventDispatcher;
-        $this->collector = $collector;
     }
 
     /**
