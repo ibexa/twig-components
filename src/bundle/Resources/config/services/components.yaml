@@ -33,7 +33,7 @@ services:
     Ibexa\TwigComponents\DataCollector\TwigComponentCollector:
         tags:
             -   name: ibexa.debug.data_collector
-                id: "ibexa.twig_components"
+                id: 'ibexa.twig_components'
                 panelTemplate: '@IbexaTwigComponents/profiler/panel.html.twig'
                 toolbarTemplate: '@IbexaTwigComponents/profiler/toolbar.html.twig'
                 priority: 150

@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
-class TwigComponentCollector extends DataCollector
+final class TwigComponentCollector extends DataCollector
 {
     /** @var array<int, mixed> */
     private array $renderedComponents = [];
