@@ -41,8 +41,6 @@ final class DefaultRenderer implements RendererInterface
      */
     public function renderGroup(string $groupName, array $parameters = []): array
     {
-        $this->collector->addAvailableGroups($groupName);
-
         $this->eventDispatcher->dispatch(new RenderGroupEvent(
             $this->registry,
             $groupName,
@@ -64,8 +62,6 @@ final class DefaultRenderer implements RendererInterface
      */
     public function renderSingle(string $groupName, string $name, array $parameters = []): string
     {
-        $this->collector->addRenderedComponent($groupName, $name);
-
         $this->eventDispatcher->dispatch(new RenderSingleEvent(
             $this->registry,
             $groupName,
