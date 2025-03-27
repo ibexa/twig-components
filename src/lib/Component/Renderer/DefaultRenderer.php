@@ -21,8 +21,10 @@ final class DefaultRenderer implements RendererInterface
 
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Registry $registry, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        Registry $registry,
+        EventDispatcherInterface $eventDispatcher,
+    ) {
         $this->registry = $registry;
         $this->eventDispatcher = $eventDispatcher;
     }

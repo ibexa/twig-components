@@ -29,7 +29,18 @@ services:
     Ibexa\Bundle\TwigComponents\Templating\Twig\ComponentExtension:
         tags:
             - { name: twig.extension }
-
+    
+    Ibexa\TwigComponents\DataCollector\TwigComponentCollector:
+        tags:
+            -   name: ibexa.debug.data_collector
+                id: 'ibexa.twig_components'
+                panelTemplate: '@IbexaTwigComponents/profiler/panel.html.twig'
+                priority: 150
+    
+    Ibexa\TwigComponents\Component\EventListener\TwigComponentCollectorSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
+    
     Ibexa\TwigComponents\Component\Renderer\DefaultRenderer:
 
     Ibexa\Contracts\TwigComponents\Renderer\RendererInterface: '@Ibexa\TwigComponents\Component\Renderer\DefaultRenderer'
