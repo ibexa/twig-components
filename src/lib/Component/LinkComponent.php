@@ -11,19 +11,19 @@ namespace Ibexa\TwigComponents\Component;
 use Ibexa\Contracts\TwigComponents\ComponentInterface;
 use Twig\Environment;
 
-class LinkComponent implements ComponentInterface
+final class LinkComponent implements ComponentInterface
 {
-    protected Environment $twig;
+    private Environment $twig;
 
-    protected string $href;
+    private string $href;
 
-    protected string $type;
+    private string $type;
 
-    protected string $rel;
+    private string $rel;
 
-    protected ?string $crossorigin;
+    private ?string $crossorigin;
 
-    protected ?string $integrity;
+    private ?string $integrity;
 
     public function __construct(
         Environment $twig,
@@ -47,7 +47,7 @@ class LinkComponent implements ComponentInterface
     public function render(array $parameters = []): string
     {
         return $this->twig->render(
-            '@ibexadesign/link.html.twig',
+            '@IbexaTwigComponents/themes/standard/twig_components/link.html.twig',
             array_merge(
                 [
                     'href' => $this->href,

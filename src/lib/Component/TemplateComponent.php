@@ -11,16 +11,16 @@ namespace Ibexa\TwigComponents\Component;
 use Ibexa\Contracts\TwigComponents\ComponentInterface;
 use Twig\Environment;
 
-class TwigComponent implements ComponentInterface
+final class TemplateComponent implements ComponentInterface
 {
-    protected Environment $twig;
+    private Environment $twig;
 
-    protected string $template;
+    private string $template;
 
     /**
      * @var array<mixed>
      */
-    protected array $parameters;
+    private array $parameters;
 
     /**
      * @param array<mixed> $parameters
@@ -40,6 +40,6 @@ class TwigComponent implements ComponentInterface
      */
     public function render(array $parameters = []): string
     {
-        return $this->twig->render($this->template, $parameters + $this->parameters);
+        return $this->twig->render($this->template, array_merge($parameters + $this->parameters));
     }
 }

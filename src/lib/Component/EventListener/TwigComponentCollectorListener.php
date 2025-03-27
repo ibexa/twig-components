@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Ibexa\TwigComponents\Component\EventListener;
 
-use Ibexa\TwigComponents\Component\Event\RenderGroupEvent;
-use Ibexa\TwigComponents\Component\Event\RenderSingleEvent;
+use Ibexa\Contracts\TwigComponents\Event\RenderGroupEvent;
+use Ibexa\Contracts\TwigComponents\Event\RenderSingleEvent;
 use Ibexa\TwigComponents\DataCollector\TwigComponentCollector;
 
 final class TwigComponentCollectorListener

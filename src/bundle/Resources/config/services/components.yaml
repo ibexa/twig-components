@@ -39,8 +39,8 @@ services:
     
     Ibexa\TwigComponents\Component\EventListener\TwigComponentCollectorListener:
         tags:
-            - { name: kernel.event_listener, event: ibexa_twig_components.render_group, method: onRenderGroup }
-            - { name: kernel.event_listener, event: ibexa_twig_components.render_single, method: onRenderSingle }
+            - { name: kernel.event_listener, event: Ibexa\Contracts\TwigComponents\Event\RenderGroupEvent, method: onRenderGroup }
+            - { name: kernel.event_listener, event: Ibexa\Contracts\TwigComponents\Event\RenderSingleEvent, method: onRenderSingle }
     
     
     Ibexa\TwigComponents\Component\Renderer\DefaultRenderer:

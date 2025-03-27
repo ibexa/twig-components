@@ -9,8 +9,9 @@ declare(strict_types=1);
 namespace Ibexa\TwigComponents\Component;
 
 use Ibexa\Contracts\TwigComponents\ComponentInterface;
+use Ibexa\Contracts\TwigComponents\ComponentRegistryInterface;
 
-final class Registry
+final class Registry implements ComponentRegistryInterface
 {
     /**
      * @var array<string, array<\Ibexa\Contracts\TwigComponents\ComponentInterface>>

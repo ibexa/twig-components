@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Ibexa\TwigComponents\Component\Renderer;
 
+use Ibexa\Contracts\TwigComponents\Event\RenderGroupEvent;
+use Ibexa\Contracts\TwigComponents\Event\RenderSingleEvent;
 use Ibexa\Contracts\TwigComponents\Exception\InvalidArgumentException;
 use Ibexa\Contracts\TwigComponents\Renderer\RendererInterface;
-use Ibexa\TwigComponents\Component\Event\RenderGroupEvent;
-use Ibexa\TwigComponents\Component\Event\RenderSingleEvent;
 use Ibexa\TwigComponents\Component\Registry;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -40,7 +40,7 @@ final class DefaultRenderer implements RendererInterface
             $this->registry,
             $groupName,
             $parameters
-        ), RenderGroupEvent::NAME);
+        ), RenderGroupEvent::class);
 
         $components = $this->registry->getComponents($groupName);
 
@@ -62,7 +62,7 @@ final class DefaultRenderer implements RendererInterface
             $groupName,
             $name,
             $parameters
-        ), RenderSingleEvent::NAME);
+        ), RenderSingleEvent::class);
 
         $components = $this->registry->getComponents($groupName);
 

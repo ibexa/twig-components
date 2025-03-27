@@ -11,21 +11,21 @@ namespace Ibexa\TwigComponents\Component;
 use Ibexa\Contracts\TwigComponents\ComponentInterface;
 use Twig\Environment;
 
-class ScriptComponent implements ComponentInterface
+final class ScriptComponent implements ComponentInterface
 {
-    protected Environment $twig;
+    private Environment $twig;
 
-    protected string $src;
+    private string $src;
 
-    protected string $type;
+    private string $type;
 
-    protected ?string $async;
+    private ?string $async;
 
-    protected ?string $defer;
+    private ?string $defer;
 
-    protected ?string $crossorigin;
+    private ?string $crossorigin;
 
-    protected ?string $integrity;
+    private ?string $integrity;
 
     public function __construct(
         Environment $twig,
@@ -55,13 +55,19 @@ class ScriptComponent implements ComponentInterface
      */
     public function render(array $parameters = []): string
     {
-        return $this->twig->render('@ibexadesign/script.html.twig', [
-            'src' => $this->src,
-            'type' => $this->type,
-            'async' => $this->async,
-            'defer' => $this->defer,
-            'crossorigin' => $this->crossorigin,
-            'integrity' => $this->integrity,
-        ] + $parameters);
+        return $this->twig->render(
+            '@IbexaTwigComponents/themes/standard/twig_components/script.html.twig',
+            array_merge(
+                [
+                    'src' => $this->src,
+                    'type' => $this->type,
+                    'async' => $this->async,
+                    'defer' => $this->defer,
+                    'crossorigin' => $this->crossorigin,
+                    'integrity' => $this->integrity,
+                ],
+                $parameters
+            )
+        );
     }
 }
