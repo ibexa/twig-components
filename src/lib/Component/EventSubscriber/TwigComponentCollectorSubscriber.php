@@ -37,6 +37,6 @@ final class TwigComponentCollectorSubscriber implements EventSubscriberInterface
 
     public function onRenderSingle(RenderSingleEvent $event): void
     {
-        $this->collector->addRenderedComponent($event->getGroupName(), $event->getName());
+        $this->collector->addRenderedComponent($event->getGroupName(), $event->getName(), $event->getComponent());
     }
 }
