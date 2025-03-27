@@ -11,7 +11,7 @@ namespace Ibexa\TwigComponents\Component;
 use Ibexa\Contracts\TwigComponents\ComponentInterface;
 use Twig\Environment;
 
-final class TemplateComponent implements ComponentInterface
+class TemplateComponent implements ComponentInterface
 {
     private Environment $twig;
 

@@ -10,7 +10,7 @@ namespace Ibexa\TwigComponents\Component;
 
 use Ibexa\Contracts\TwigComponents\ComponentInterface;
 
-final class HtmlComponent implements ComponentInterface
+class HtmlComponent implements ComponentInterface
 {
     private string $content;
 

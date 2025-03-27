@@ -6,7 +6,7 @@ services:
         
     Ibexa\TwigComponents\Component\Registry:
 
-    Ibexa\TwigComponents\Component\TwigComponent:
+    Ibexa\TwigComponents\Component\TemplateComponent:
         abstract: true
         lazy: true
 
@@ -36,12 +36,10 @@ services:
                 id: 'ibexa.twig_components'
                 panelTemplate: '@IbexaTwigComponents/profiler/panel.html.twig'
                 priority: 150
-    
-    Ibexa\TwigComponents\Component\EventListener\TwigComponentCollectorListener:
+                
+    Ibexa\TwigComponents\Component\EventSubscriber\TwigComponentCollectorSubscriber:
         tags:
-            - { name: kernel.event_listener, event: Ibexa\Contracts\TwigComponents\Event\RenderGroupEvent, method: onRenderGroup }
-            - { name: kernel.event_listener, event: Ibexa\Contracts\TwigComponents\Event\RenderSingleEvent, method: onRenderSingle }
-    
+            - { name: kernel.event_subscriber }
     
     Ibexa\TwigComponents\Component\Renderer\DefaultRenderer:
 
