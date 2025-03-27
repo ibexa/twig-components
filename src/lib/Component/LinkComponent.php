@@ -11,7 +11,7 @@ namespace Ibexa\TwigComponents\Component;
 use Ibexa\Contracts\TwigComponents\ComponentInterface;
 use Twig\Environment;
 
-final class LinkComponent implements ComponentInterface
+class LinkComponent implements ComponentInterface
 {
     private Environment $twig;
 
