@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Ibexa\TwigComponents\DataCollector;
 
-use Ibexa\Contracts\TwigComponents\ComponentInterface;
+use Ibexa\Contracts\TwigComponents\Event\RenderSingleEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -21,9 +21,13 @@ final class TwigComponentCollector extends DataCollector
     /** @var array<int, mixed> */
     private array $availableGroups = [];
 
-    public function addRenderedComponent(string $group, string $name, ComponentInterface $component): void
+    public function addRenderedComponent(RenderSingleEvent $event): void
     {
+        $group = $event->getGroupName();
+        $name = $event->getName();
+        $component = $event->getComponent();
         $componentClass = get_parent_class($component);
+
         $this->renderedComponents[] = compact('group', 'name', 'componentClass');
     }
 
