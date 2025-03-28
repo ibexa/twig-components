@@ -6,16 +6,14 @@
  */
 declare(strict_types=1);
 
-namespace Ibexa\TwigComponents\Component\Event;
+namespace Ibexa\Contracts\TwigComponents\Event;
 
-use Ibexa\TwigComponents\Component\Registry;
+use Ibexa\Contracts\TwigComponents\ComponentRegistryInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 final class RenderGroupEvent extends Event
 {
-    public const NAME = 'ibexa_twig_components.render_group';
-
-    private Registry $registry;
+    private ComponentRegistryInterface $registry;
 
     private string $groupName;
 
@@ -27,7 +25,7 @@ final class RenderGroupEvent extends Event
     /**
      * @param array<mixed> $parameters
      */
-    public function __construct(Registry $registry, string $groupName, array $parameters = [])
+    public function __construct(ComponentRegistryInterface $registry, string $groupName, array $parameters = [])
     {
         $this->registry = $registry;
         $this->groupName = $groupName;

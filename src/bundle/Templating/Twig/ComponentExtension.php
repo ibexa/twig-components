@@ -9,21 +9,15 @@ declare(strict_types=1);
 namespace Ibexa\Bundle\TwigComponents\Templating\Twig;
 
 use Ibexa\Contracts\TwigComponents\Renderer\RendererInterface;
-use Ibexa\TwigComponents\Component\Registry as ComponentRegistry;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 final class ComponentExtension extends AbstractExtension
 {
-    protected ComponentRegistry $registry;
+    private RendererInterface $renderer;
 
-    protected RendererInterface $renderer;
-
-    public function __construct(
-        ComponentRegistry $registry,
-        RendererInterface $renderer
-    ) {
-        $this->registry = $registry;
+    public function __construct(RendererInterface $renderer)
+    {
         $this->renderer = $renderer;
     }
 

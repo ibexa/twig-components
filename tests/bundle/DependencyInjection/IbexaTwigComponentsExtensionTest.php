@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Ibexa\Tests\Bundle\TwigComponents\DependencyInjection;
 
 use Ibexa\Bundle\TwigComponents\DependencyInjection\IbexaTwigComponentsExtension;
-use Ibexa\TwigComponents\Component\TwigComponent;
+use Ibexa\TwigComponents\Component\TemplateComponent;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
@@ -34,7 +34,7 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
             ],
         ]);
 
-        self::assertContainerBuilderHasService('test_component', TwigComponent::class);
+        self::assertContainerBuilderHasService('test_component', TemplateComponent::class);
         self::assertContainerBuilderHasServiceDefinitionWithTag(
             'test_component',
             'ibexa.twig.component',

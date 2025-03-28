@@ -12,7 +12,7 @@ use Ibexa\Contracts\TwigComponents\ComponentInterface;
 
 class HtmlComponent implements ComponentInterface
 {
-    protected string $content;
+    private string $content;
 
     public function __construct(string $content)
     {

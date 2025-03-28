@@ -14,7 +14,7 @@ use Ibexa\TwigComponents\Component\ControllerComponent;
 use Ibexa\TwigComponents\Component\HtmlComponent;
 use Ibexa\TwigComponents\Component\LinkComponent;
 use Ibexa\TwigComponents\Component\ScriptComponent;
-use Ibexa\TwigComponents\Component\TwigComponent;
+use Ibexa\TwigComponents\Component\TemplateComponent;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,7 +29,7 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
     public const COMPONENT_MAP = [
         'script' => ScriptComponent::class,
         'stylesheet' => LinkComponent::class,
-        'template' => TwigComponent::class,
+        'template' => TemplateComponent::class,
         'controller' => ControllerComponent::class,
         'html' => HtmlComponent::class,
     ];
