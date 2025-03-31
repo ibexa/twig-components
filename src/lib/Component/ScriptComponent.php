@@ -56,7 +56,7 @@ class ScriptComponent implements ComponentInterface
     public function render(array $parameters = []): string
     {
         return $this->twig->render(
-            '@IbexaTwigComponents/themes/standard/twig_components/script.html.twig',
+            '@ibexadesign/twig_components/script.html.twig',
             array_merge(
                 [
                     'src' => $this->src,
