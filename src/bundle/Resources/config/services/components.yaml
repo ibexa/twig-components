@@ -36,7 +36,7 @@ services:
                 id: 'ibexa.twig_components'
                 panelTemplate: '@IbexaTwigComponents/profiler/panel.html.twig'
                 priority: 150
-                
+    
     Ibexa\TwigComponents\Component\EventSubscriber\TwigComponentCollectorSubscriber:
         tags:
             - { name: kernel.event_subscriber }
