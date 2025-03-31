@@ -35,12 +35,12 @@ final class ComponentExtension extends AbstractExtension
         return [
             new TwigFunction(
                 'ibexa_twig_component_group',
-                [$this, 'renderComponentGroup'],
+                $this->renderComponentGroup(...),
                 ['is_safe' => ['html']]
             ),
             new TwigFunction(
                 'ibexa_twig_component',
-                [$this, 'renderComponent'],
+                $this->renderComponent(...),
                 ['is_safe' => ['html']]
             ),
         ];
