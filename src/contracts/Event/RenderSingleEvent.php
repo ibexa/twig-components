@@ -6,17 +6,15 @@
  */
 declare(strict_types=1);
 
-namespace Ibexa\TwigComponents\Component\Event;
+namespace Ibexa\Contracts\TwigComponents\Event;
 
 use Ibexa\Contracts\TwigComponents\ComponentInterface;
-use Ibexa\TwigComponents\Component\Registry;
+use Ibexa\Contracts\TwigComponents\ComponentRegistryInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 final class RenderSingleEvent extends Event
 {
-    public const NAME = 'ibexa_twig_components.render_single';
-
-    private Registry $registry;
+    private ComponentRegistryInterface $registry;
 
     private string $groupName;
 
@@ -31,10 +29,10 @@ final class RenderSingleEvent extends Event
      * @param array<mixed> $parameters
      */
     public function __construct(
-        Registry $registry,
+        ComponentRegistryInterface $registry,
         string $groupName,
         string $serviceId,
-        array $parameters = [],
+        array $parameters = []
     ) {
         $this->registry = $registry;
         $this->groupName = $groupName;
