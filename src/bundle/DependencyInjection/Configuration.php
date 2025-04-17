@@ -20,8 +20,10 @@ final class Configuration implements ConfigurationInterface
 
         $rootNode
             ->useAttributeAsKey('group')
+            ->normalizeKeys(false)
             ->arrayPrototype()
                 ->useAttributeAsKey('name')
+                ->normalizeKeys(false)
                 ->arrayPrototype()
                     ->children()
                         ->scalarNode('type')
