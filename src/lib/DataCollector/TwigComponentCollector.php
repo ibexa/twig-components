@@ -23,7 +23,8 @@ final class TwigComponentCollector extends DataCollector
 
     public function addRenderedComponent(string $group, string $name, ComponentInterface $component): void
     {
-        $componentClass = get_parent_class($component);
+        $componentClass = get_parent_class($component) ?: get_class($component);
+
         $this->renderedComponents[] = compact('group', 'name', 'componentClass');
     }
 
