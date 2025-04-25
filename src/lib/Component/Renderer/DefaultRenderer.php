@@ -57,14 +57,27 @@ final class DefaultRenderer implements RendererInterface
      */
     public function renderSingle(string $groupName, string $name, array $parameters = []): string
     {
+        $components = $this->registry->getComponents($groupName);
+
+        return $this->renderSingleWithComponents($groupName, $name, $components, $parameters);
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     * @param array<string, \Ibexa\Contracts\TwigComponents\ComponentInterface> $components
+     */
+    private function renderSingleWithComponents(
+        string $groupName,
+        string $name,
+        array $components,
+        array $parameters = []
+    ): string {
         $this->eventDispatcher->dispatch(new RenderSingleEvent(
             $this->registry,
             $groupName,
             $name,
             $parameters
         ), RenderSingleEvent::class);
-
-        $components = $this->registry->getComponents($groupName);
 
         if (!isset($components[$name])) {
             throw new InvalidArgumentException(

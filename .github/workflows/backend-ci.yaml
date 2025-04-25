@@ -10,7 +10,7 @@ on:
 jobs:
     cs-fix:
         name: Run code style check
-        runs-on: "ubuntu-22.04"
+        runs-on: "ubuntu-24.04"
         strategy:
             matrix:
                 php:
@@ -35,7 +35,7 @@ jobs:
 
     deptrac:
         name: Deptrac
-        runs-on: ubuntu-latest
+        runs-on: "ubuntu-24.04"
         steps:
             -   uses: actions/checkout@v3
             -   name: Deptrac
@@ -43,7 +43,7 @@ jobs:
 
     tests:
         name: Tests
-        runs-on: "ubuntu-22.04"
+        runs-on: "ubuntu-24.04"
         timeout-minutes: 10
 
         strategy:
