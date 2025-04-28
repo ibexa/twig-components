@@ -45,8 +45,8 @@ final class DefaultRenderer implements RendererInterface
         $components = $this->registry->getComponents($groupName);
 
         $rendered = [];
-        foreach ($components as $id => $component) {
-            $rendered[] = $this->renderSingle($groupName, $id, $parameters);
+        foreach ($components as $name => $component) {
+            $rendered[] = $this->renderSingleWithComponents($groupName, $name, $components, $parameters);
         }
 
         return $rendered;
