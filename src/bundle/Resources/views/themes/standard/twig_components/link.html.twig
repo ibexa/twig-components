@@ -2,11 +2,11 @@
         type="{{ type }}"
         href="{{ href }}"
         rel="{{ rel }}"
-        {% if crossorigin is not empty %}
+        {%- if crossorigin is not empty %}
             crossorigin="{{ crossorigin }}"
-        {% endif %}
+        {% endif -%}
 
-        {% if integrity is not empty %}
+        {%- if integrity is not empty %}
             integrity="{{ integrity }}"
-        {% endif %}
+        {% endif -%}
 />

@@ -1,19 +1,19 @@
 <script
         type="{{ type }}"
         src="{{ src }}"
-        {% if async is not empty %}
+        {%- if async is not empty %}
             async="{{ async }}"
-        {% endif %}
+        {% endif -%}
 
-        {% if defer is not empty %}
+        {%- if defer is not empty %}
             defer="{{ defer }}"
-        {% endif %}
+        {% endif -%}
 
-        {% if crossorigin is not empty %}
+        {%- if crossorigin is not empty %}
             crossorigin="{{ crossorigin }}"
-        {% endif %}
+        {% endif -%}
 
-        {% if integrity is not empty %}
+        {%- if integrity is not empty %}
             integrity="{{ integrity }}"
-        {% endif %}
+        {% endif -%}
 ></script>
