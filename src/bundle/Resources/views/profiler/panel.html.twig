@@ -22,7 +22,8 @@
         <thead>
         <tr>
             <th>Group</th>
-            <th>Component</th>
+            <th>Component Name</th>
+            <th>Component Class</th>
         </tr>
         </thead>
         <tbody>
@@ -30,6 +31,7 @@
             <tr>
                 <td>{{ component.group }}</td>
                 <td>{{ component.name }}</td>
+                <td>{{ component.componentClass }}</td>
             </tr>
         {% endfor %}
         </tbody>

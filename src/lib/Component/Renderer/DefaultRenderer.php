@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Ibexa\TwigComponents\Component\Renderer;
 
+use Ibexa\Contracts\TwigComponents\Event\RenderGroupEvent;
+use Ibexa\Contracts\TwigComponents\Event\RenderSingleEvent;
 use Ibexa\Contracts\TwigComponents\Exception\InvalidArgumentException;
 use Ibexa\Contracts\TwigComponents\Renderer\RendererInterface;
-use Ibexa\TwigComponents\Component\Event\RenderGroupEvent;
-use Ibexa\TwigComponents\Component\Event\RenderSingleEvent;
 use Ibexa\TwigComponents\Component\Registry;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -23,7 +23,7 @@ final class DefaultRenderer implements RendererInterface
 
     public function __construct(
         Registry $registry,
-        EventDispatcherInterface $eventDispatcher,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->registry = $registry;
         $this->eventDispatcher = $eventDispatcher;
@@ -40,13 +40,13 @@ final class DefaultRenderer implements RendererInterface
             $this->registry,
             $groupName,
             $parameters
-        ), RenderGroupEvent::NAME);
+        ), RenderGroupEvent::class);
 
         $components = $this->registry->getComponents($groupName);
 
         $rendered = [];
-        foreach ($components as $id => $component) {
-            $rendered[] = $this->renderSingle($groupName, $id, $parameters);
+        foreach ($components as $name => $component) {
+            $rendered[] = $this->renderSingleWithComponents($groupName, $name, $components, $parameters);
         }
 
         return $rendered;
@@ -57,14 +57,27 @@ final class DefaultRenderer implements RendererInterface
      */
     public function renderSingle(string $groupName, string $name, array $parameters = []): string
     {
+        $components = $this->registry->getComponents($groupName);
+
+        return $this->renderSingleWithComponents($groupName, $name, $components, $parameters);
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     * @param array<string, \Ibexa\Contracts\TwigComponents\ComponentInterface> $components
+     */
+    private function renderSingleWithComponents(
+        string $groupName,
+        string $name,
+        array $components,
+        array $parameters = []
+    ): string {
         $this->eventDispatcher->dispatch(new RenderSingleEvent(
             $this->registry,
             $groupName,
             $name,
             $parameters
-        ), RenderSingleEvent::NAME);
-
-        $components = $this->registry->getComponents($groupName);
+        ), RenderSingleEvent::class);
 
         if (!isset($components[$name])) {
             throw new InvalidArgumentException(
