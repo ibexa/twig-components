@@ -61,7 +61,10 @@ final class RenderGroupEvent extends Event
         return $this->parameters;
     }
 
-    public function addParameter(string $key, mixed $value): void
+    /**
+     * @param mixed $value
+     */
+    public function addParameter(string $key, $value): void
     {
         $this->parameters[$key] = $value;
     }
