@@ -70,11 +70,16 @@ final class RenderSingleEvent extends Event
         return $this->parameters;
     }
 
+    public function addParameter(string $key, mixed $value): void
+    {
+        $this->parameters[$key] = $value;
+    }
+
     /**
      * @param array<mixed> $parameters
      */
-    public function setParameters(array $parameters): void
+    public function addParameters(array $parameters): void
     {
-        $this->parameters = $parameters;
+        $this->parameters = array_merge($this->parameters, $parameters);
     }
 }
