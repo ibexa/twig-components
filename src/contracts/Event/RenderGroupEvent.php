@@ -60,4 +60,12 @@ final class RenderGroupEvent extends Event
     {
         return $this->parameters;
     }
+
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function setParameters(array $parameters): void
+    {
+        $this->parameters = $parameters;
+    }
 }
