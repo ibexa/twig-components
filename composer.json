@@ -5,6 +5,8 @@
     "keywords": [
         "ibexa-dxp"
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": "^7.4 || ^8.0",
         "ibexa/core": "~4.6.x-dev",
