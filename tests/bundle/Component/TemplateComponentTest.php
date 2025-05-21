@@ -14,6 +14,23 @@ use Twig\Environment;
 
 final class TemplateComponentTest extends TestCase
 {
+    public function testRenderWithoutParameters(): void
+    {
+        $twig = $this->configureTwig([
+            '__parameter__' => true,
+        ]);
+
+        $component = new TemplateComponent(
+            $twig,
+            '__template__',
+            [
+                '__parameter__' => true,
+            ],
+        );
+
+        $component->render();
+    }
+
     public function testRenderWithParameters(): void
     {
         $twig = $this->configureTwig([
@@ -33,10 +50,11 @@ final class TemplateComponentTest extends TestCase
         ]);
     }
 
-    public function testRenderWithoutParameters(): void
+    public function testRenderWithNewParameter(): void
     {
         $twig = $this->configureTwig([
             '__parameter__' => true,
+            '__new_parameter__' => 'foo',
         ]);
 
         $component = new TemplateComponent(
@@ -47,7 +65,9 @@ final class TemplateComponentTest extends TestCase
             ],
         );
 
-        $component->render();
+        $component->render([
+            '__new_parameter__' => 'foo',
+        ]);
     }
 
     /**
