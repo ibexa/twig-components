@@ -40,6 +40,6 @@ class TemplateComponent implements ComponentInterface
      */
     public function render(array $parameters = []): string
     {
-        return $this->twig->render($this->template, array_merge($parameters + $this->parameters));
+        return $this->twig->render($this->template, array_merge($parameters, $this->parameters));
     }
 }
