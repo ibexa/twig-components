@@ -18,7 +18,7 @@ final class ComponentPass implements CompilerPassInterface
 {
     use PriorityTaggedServiceTrait;
 
-    public const TAG_NAME = 'ibexa.twig.component';
+    public const string TAG_NAME = 'ibexa.twig.component';
 
     public function process(ContainerBuilder $container): void
     {
@@ -42,7 +42,10 @@ final class ComponentPass implements CompilerPassInterface
                     );
                 }
                 $id = $tag['id'] ?? $id;
-                $registryDefinition->addMethodCall('addComponent', [$tag['group'], $id, $serviceReference]);
+                $registryDefinition->addMethodCall(
+                    'addComponent',
+                    [$tag['group'], $id, $serviceReference]
+                );
             }
         }
     }
