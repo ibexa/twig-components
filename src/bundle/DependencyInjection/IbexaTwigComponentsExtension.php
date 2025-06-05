@@ -60,7 +60,7 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
 
         $container->registerAttributeForAutoconfiguration(
             AsTwigComponent::class,
-            function (Definition $definition, AsTwigComponent $attribute) {
+            static function (Definition $definition, AsTwigComponent $attribute) {
                 $definition->addTag('ibexa.twig.component', [
                     'group' => $attribute->group,
                 ]);
