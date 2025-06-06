@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Ibexa\Bundle\TwigComponents\DependencyInjection;
 
 use Ibexa\Bundle\TwigComponents\DependencyInjection\Compiler\ComponentPass;
+use Ibexa\Contracts\TwigComponents\Attribute\AsTwigComponent;
 use Ibexa\Contracts\TwigComponents\Exception\InvalidArgumentException;
 use Ibexa\TwigComponents\Component\ControllerComponent;
 use Ibexa\TwigComponents\Component\HtmlComponent;
@@ -56,6 +57,15 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
 
         $configuration = $this->processConfiguration(new Configuration(), $configs);
         $this->registerConfiguredComponents($configuration, $container);
+
+        $container->registerAttributeForAutoconfiguration(
+            AsTwigComponent::class,
+            static function (Definition $definition, AsTwigComponent $attribute): void {
+                $definition->addTag('ibexa.twig.component', [
+                    'group' => $attribute->group,
+                ]);
+            }
+        );
     }
 
     public function prepend(ContainerBuilder $container): void
