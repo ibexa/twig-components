@@ -75,7 +75,8 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
 
     public function testAttributeCausesTagToBeAdded(): void
     {
-        $this->container->register(DummyComponent::class, DummyComponent::class)
+        $this->container
+            ->register(DummyComponent::class, DummyComponent::class)
             ->setAutowired(true)
             ->setAutoconfigured(true);
         $this->load();
