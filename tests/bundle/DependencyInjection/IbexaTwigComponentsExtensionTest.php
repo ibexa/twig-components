@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Ibexa\Tests\Bundle\TwigComponents\DependencyInjection;
 
 use Ibexa\Bundle\TwigComponents\DependencyInjection\IbexaTwigComponentsExtension;
+use Ibexa\Tests\Bundle\TwigComponents\Fixtures\DummyComponent;
 use Ibexa\TwigComponents\Component\TemplateComponent;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -70,5 +71,20 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
                 ],
             ],
         ]);
+    }
+
+    public function testAttributeCausesTagToBeAdded(): void
+    {
+        $this->container->register(DummyComponent::class, DummyComponent::class)
+            ->setAutowired(true)
+            ->setAutoconfigured(true);
+        $this->load();
+        $this->compile();
+
+        $this->assertContainerBuilderHasServiceDefinitionWithTag(
+            DummyComponent::class,
+            'ibexa.twig.component',
+            ['group' => 'test_group']
+        );
     }
 }
