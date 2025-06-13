@@ -26,6 +26,7 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
             'test_group' => [
                 'test_component' => [
                     'type' => 'template',
+                    'priority' => 100,
                     'arguments' => [
                         'template' => '@ibexa/template.html.twig',
                         'parameters' => ['title' => 'Test Title'],
@@ -38,7 +39,10 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
         self::assertContainerBuilderHasServiceDefinitionWithTag(
             'test_component',
             'ibexa.twig.component',
-            ['group' => 'test_group']
+            [
+                'group' => 'test_group',
+                'priority' => 100,
+            ]
         );
 
         self::assertContainerBuilderHasServiceDefinitionWithArgument(
