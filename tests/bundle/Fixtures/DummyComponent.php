@@ -10,7 +10,7 @@ namespace Ibexa\Tests\Bundle\TwigComponents\Fixtures;
 
 use Ibexa\Contracts\TwigComponents\Attribute\AsTwigComponent;
 
-#[AsTwigComponent(group: 'test_group')]
+#[AsTwigComponent(group: 'test_group', priority: 100)]
 final class DummyComponent
 {
 }

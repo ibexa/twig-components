@@ -15,6 +15,7 @@ final class AsTwigComponent
 {
     public function __construct(
         public string $group,
+        public int $priority = 0,
     ) {
     }
 }

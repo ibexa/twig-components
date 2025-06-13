@@ -85,7 +85,10 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
             DummyComponent::class,
             'ibexa.twig.component',
-            ['group' => 'test_group']
+            [
+                'group' => 'test_group',
+                'priority' => 100,
+            ]
         );
     }
 }
