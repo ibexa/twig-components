@@ -63,6 +63,7 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
             static function (Definition $definition, AsTwigComponent $attribute): void {
                 $definition->addTag('ibexa.twig.component', [
                     'group' => $attribute->group,
+                    'priority' => $attribute->priority,
                 ]);
             }
         );
