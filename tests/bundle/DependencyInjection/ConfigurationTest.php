@@ -33,6 +33,7 @@ final class ConfigurationTest extends TestCase
                         'foo_group1' => [
                             'foo_component1' => [
                                 'type' => 'script',
+                                'priority' => 100,
                                 'arguments' => [
                                     'src' => 'script.js',
                                 ],
@@ -70,18 +71,21 @@ final class ConfigurationTest extends TestCase
                     'foo_group1' => [
                         'foo_component1' => [
                             'type' => 'script',
+                            'priority' => 100,
                             'arguments' => [
                                 'src' => 'script.js',
                             ],
                         ],
                         'foo_component2' => [
                             'type' => 'template',
+                            'priority' => 0,
                             'arguments' => [
                                 'template' => 'template.html.twig',
                             ],
                         ],
                         'foo_component3' => [
                             'type' => 'html',
+                            'priority' => 0,
                             'arguments' => [
                                 'content' => 'template.html.twig',
                             ],
@@ -90,12 +94,14 @@ final class ConfigurationTest extends TestCase
                     'foo_group2' => [
                         'foo_component1' => [
                             'type' => 'controller',
+                            'priority' => 0,
                             'arguments' => [
                                 'controler' => 'SomeController:SomeAction',
                             ],
                         ],
                         'foo_component2' => [
                             'type' => 'stylesheet',
+                            'priority' => 0,
                             'arguments' => [
                                 'content' => 'stylesheet.css',
                             ],
@@ -134,6 +140,7 @@ final class ConfigurationTest extends TestCase
                     'foo_group1' => [
                         'foo_component1' => [
                             'type' => 'template',
+                            'priority' => 0,
                             'arguments' => [
                                 'template' => 'template.html.twig',
                                 'parameters' => [
@@ -144,6 +151,7 @@ final class ConfigurationTest extends TestCase
                         ],
                         'foo_component2' => [
                             'type' => 'controller',
+                            'priority' => 0,
                             'arguments' => [
                                 'controler' => 'SomeController:SomeAction',
                                 'parameters' => [
