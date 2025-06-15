@@ -137,7 +137,13 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
                 $definition->setAutowired(true);
                 $definition->setAutoconfigured(true);
                 $definition->setPublic(false);
-                $definition->addTag(ComponentPass::TAG_NAME, ['group' => $group]);
+                $definition->addTag(
+                    ComponentPass::TAG_NAME,
+                    [
+                        'group' => $group,
+                        'priority' => $componentConfig['priority'],
+                    ]
+                );
 
                 $container->setDefinition($name, $definition);
             }
