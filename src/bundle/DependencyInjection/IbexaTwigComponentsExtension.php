@@ -14,6 +14,7 @@ use Ibexa\Contracts\TwigComponents\Exception\InvalidArgumentException;
 use Ibexa\TwigComponents\Component\ControllerComponent;
 use Ibexa\TwigComponents\Component\HtmlComponent;
 use Ibexa\TwigComponents\Component\LinkComponent;
+use Ibexa\TwigComponents\Component\MenuComponent;
 use Ibexa\TwigComponents\Component\ScriptComponent;
 use Ibexa\TwigComponents\Component\TemplateComponent;
 use Symfony\Component\Config\FileLocator;
@@ -33,6 +34,7 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
         'template' => TemplateComponent::class,
         'controller' => ControllerComponent::class,
         'html' => HtmlComponent::class,
+        'menu' => MenuComponent::class,
     ];
 
     public const EXTENSION_NAME = 'ibexa_twig_components';
