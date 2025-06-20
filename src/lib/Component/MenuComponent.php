@@ -24,18 +24,18 @@ class MenuComponent implements ComponentInterface
     private array $options;
 
     /** @var string[] */
-    private array $path = [];
+    private array $path;
 
     private ?string $template;
 
     private ?int $depth;
 
     /**
-     * @param string $name Menu name
-     * @param array<string, mixed> $options Options for the menu
-     * @param string[] $path Path to the menu item
+     * @param string $name Name of the menu
+     * @param array<string, mixed> $options Options passed to menu builder
+     * @param string[] $path Path to starting node
      * @param string|null $template Template to use for rendering the menu
-     * @param int|null $depth Depth of the menu to render
+     * @param int|null $depth Depth limit
      */
     public function __construct(
         Environment $twig,

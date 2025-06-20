@@ -26,7 +26,7 @@ final class MenuComponentTest extends TestCase
     ];
 
     /**
-     * @dataProvider dataProviderForRender
+     * @dataProvider dataProviderForTestRender
      *
      * @param array<string, mixed> $options Options passed to the menu component
      * @param array<string> $path Menu item path
@@ -68,7 +68,7 @@ final class MenuComponentTest extends TestCase
      *     array<string, mixed>
      * }>
      */
-    public function dataProviderForRender(): iterable
+    public function dataProviderForTestRender(): iterable
     {
         yield 'default' => [
             self::EXAMPLE_MENU_NAME,
