@@ -9,7 +9,7 @@
     ],
     "require": {
         "php": ">=8.3",
-        "ibexa/core": "~5.0.x-dev",
+        "ibexa/core": "~5.0@rc",
         "knplabs/knp-menu": "^3.8",
         "symfony/config": "^7.2",
         "symfony/dependency-injection": "^7.2",
@@ -20,11 +20,11 @@
         "symfony/yaml": "^7.2"
     },
     "require-dev": {
-        "ibexa/behat": "~5.0.x-dev",
+        "ibexa/behat": "~5.0@rc",
         "ibexa/code-style": "~2.0.0",
-        "ibexa/doctrine-schema": "~5.0.x-dev",
-        "ibexa/phpstan": "~5.0.x-dev",
-        "ibexa/rector": "~5.0.x-dev",
+        "ibexa/doctrine-schema": "~5.0@rc",
+        "ibexa/phpstan": "~5.0@rc",
+        "ibexa/rector": "~5.0@rc",
         "matthiasnoback/symfony-config-test": "^4.3.0 || ^5.1",
         "matthiasnoback/symfony-dependency-injection-test": "^4.3.1 || ^5.0",
         "phpstan/phpstan": "^2.0",
