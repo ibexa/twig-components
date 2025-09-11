@@ -25,6 +25,10 @@ services:
     Ibexa\TwigComponents\Component\HtmlComponent:
         abstract: true
         lazy: true
+ 
+    Ibexa\TwigComponents\Component\MenuComponent:
+        abstract: true
+        lazy: true
 
     Ibexa\Bundle\TwigComponents\Templating\Twig\ComponentExtension:
         tags:
