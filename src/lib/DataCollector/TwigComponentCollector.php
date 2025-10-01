@@ -12,6 +12,7 @@ use Ibexa\Contracts\TwigComponents\ComponentInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Throwable;
 
 final class TwigComponentCollector extends DataCollector
 {
@@ -33,7 +34,7 @@ final class TwigComponentCollector extends DataCollector
         $this->availableGroups[] = compact('group');
     }
 
-    public function collect(Request $request, Response $response, \Throwable $exception = null): void
+    public function collect(Request $request, Response $response, ?Throwable $exception = null): void
     {
         $this->data['rendered_components'] = $this->renderedComponents;
         $this->data['available_groups'] = $this->availableGroups;
