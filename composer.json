@@ -7,7 +7,7 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0",
-        "ibexa/core": "~4.6.x-dev",
+        "ibexa/core": "~4.6",
         "symfony/config": "^5.4",
         "symfony/dependency-injection": "^5.4",
         "symfony/event-dispatcher": "^5.4",
@@ -17,10 +17,10 @@
         "symfony/yaml": "^5.4"
     },
     "require-dev": {
-        "ibexa/behat": "~4.6.x-dev",
+        "ibexa/behat": "~4.6",
         "ibexa/code-style": "~2.0.0",
-        "ibexa/doctrine-schema": "~4.6.x-dev",
-        "ibexa/phpstan": "~4.6.x-dev",
+        "ibexa/doctrine-schema": "~4.6",
+        "ibexa/phpstan": "~4.6",
         "knplabs/knp-menu": "^3.3",
         "matthiasnoback/symfony-config-test": "^4.3.0 || ^5.1",
         "matthiasnoback/symfony-dependency-injection-test": "^4.3.1 || ^5.0",
