@@ -126,5 +126,84 @@ final class TableTest extends IbexaKernelTestCase
         self::assertStringNotContainsString('Original Title', $html);
         self::assertStringContainsString('Overridden Description', $html);
         self::assertStringNotContainsString('Original Description', $html);
+
+        $dispatcher->removeListener(PreMountEvent::class, $listener);
+    }
+
+    public function testTableComponentAllowsAddingColumnsViaEvent(): void
+    {
+        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
+        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
+        $listener = static function (PreMountEvent $event): void {
+            $component = $event->getComponent();
+            if (!$component instanceof Table) {
+                return;
+            }
+
+            $component->addColumn(
+                'extra_column',
+                'Extra Column Label',
+                static fn (object $item): string => 'Value: ' . ($item->name ?? 'unknown')
+            );
+        };
+        $dispatcher->addListener(PreMountEvent::class, $listener);
+
+        $item = new \stdClass();
+        $item->name = 'Foo';
+
+        $rendered = $this->renderTwigComponent(
+            name: 'ibexa.Table',
+            data: [
+                'data' => [$item],
+            ],
+        );
+
+        $html = $rendered->toString();
+        self::assertStringContainsString('Extra Column Label', $html);
+        self::assertStringContainsString('Value: Foo', $html);
+
+        $dispatcher->removeListener(PreMountEvent::class, $listener);
+    }
+
+    public function testTableComponentRespectsColumnPriorityViaEvent(): void
+    {
+        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
+        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
+        $listener = static function (PreMountEvent $event): void {
+            $component = $event->getComponent();
+            if (!$component instanceof Table) {
+                return;
+            }
+
+            $component->addColumn(
+                'low_priority',
+                'Low Priority Column',
+                static fn (): string => 'Low',
+                10
+            );
+            $component->addColumn(
+                'high_priority',
+                'High Priority Column',
+                static fn (): string => 'High',
+                100
+            );
+        };
+        $dispatcher->addListener(PreMountEvent::class, $listener);
+
+        $rendered = $this->renderTwigComponent(
+            name: 'ibexa.Table',
+            data: [
+                'data' => [new \stdClass()],
+            ],
+        );
+
+        $html = $rendered->toString();
+        // High Priority Column should come before Low Priority Column
+        self::assertGreaterThan(
+            strpos($html, 'High Priority Column'),
+            strpos($html, 'Low Priority Column')
+        );
+
+        $dispatcher->removeListener(PreMountEvent::class, $listener);
     }
 }
