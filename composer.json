@@ -77,9 +77,6 @@
     },
     "config": {
         "sort-packages": true,
-        "allow-plugins": false,
-        "audit": {
-            "block-insecure": false
-        }
+        "allow-plugins": false
     }
 }
