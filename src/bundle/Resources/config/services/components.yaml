@@ -47,4 +47,6 @@ services:
     
     Ibexa\TwigComponents\Component\Renderer\DefaultRenderer:
 
+    Ibexa\Bundle\TwigComponents\Templating\Twig\Components\Table: ~
+
     Ibexa\Contracts\TwigComponents\Renderer\RendererInterface: '@Ibexa\TwigComponents\Component\Renderer\DefaultRenderer'
