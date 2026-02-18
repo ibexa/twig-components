@@ -16,7 +16,7 @@ jobs:
                 php:
                     - '8.1'
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v6
 
             -   name: Setup PHP Action
                 uses: shivammathur/setup-php@v2
@@ -37,7 +37,7 @@ jobs:
         name: Deptrac
         runs-on: "ubuntu-24.04"
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v6
             -   name: Deptrac
                 uses: smoench/deptrac-action@master
 
@@ -51,11 +51,11 @@ jobs:
             matrix:
                 php:
                     - '7.4'
-                    - '8.1'
-                    - '8.2'
+                    - '8.3'
+                    - '8.4'
 
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v6
 
             -   name: Setup PHP Action
                 uses: shivammathur/setup-php@v2
