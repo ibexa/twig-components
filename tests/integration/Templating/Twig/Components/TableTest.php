@@ -15,7 +15,6 @@ use Ibexa\Contracts\Test\Core\IbexaKernelTestCase;
 use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessServiceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\UX\TwigComponent\Event\PreMountEvent;
 use Symfony\UX\TwigComponent\Test\InteractsWithTwigComponents;
 
@@ -85,49 +84,11 @@ final class TableTest extends IbexaKernelTestCase
             name: 'ibexa.Table',
             data: [
                 'data' => [],
-                'emptyStateTitle' => new TranslatableMessage('Custom Title', [], 'messages'),
-                'emptyStateDescription' => new TranslatableMessage('Custom Description', [], 'messages'),
             ],
         );
 
         $html = $rendered->toString();
         self::assertStringContainsString('ibexa-empty-state', $html);
-        self::assertStringContainsString('Custom Title', $html);
-        self::assertStringContainsString('Custom Description', $html);
-    }
-
-    public function testTableComponentRespectsPreMountEvent(): void
-    {
-        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
-        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
-        $listener = static function (PreMountEvent $event): void {
-            if (!$event->getComponent() instanceof Table) {
-                return;
-            }
-
-            $data = $event->getData();
-            $data['emptyStateTitle'] = new TranslatableMessage('Overridden Title', [], 'messages');
-            $data['emptyStateDescription'] = new TranslatableMessage('Overridden Description', [], 'messages');
-            $event->setData($data);
-        };
-        $dispatcher->addListener(PreMountEvent::class, $listener);
-
-        $rendered = $this->renderTwigComponent(
-            name: 'ibexa.Table',
-            data: [
-                'data' => [],
-                'emptyStateTitle' => new TranslatableMessage('Original Title', [], 'ibexa_search'),
-                'emptyStateDescription' => new TranslatableMessage('Original Description', [], 'ibexa_search'),
-            ],
-        );
-
-        $html = $rendered->toString();
-        self::assertStringContainsString('Overridden Title', $html);
-        self::assertStringNotContainsString('Original Title', $html);
-        self::assertStringContainsString('Overridden Description', $html);
-        self::assertStringNotContainsString('Original Description', $html);
-
-        $dispatcher->removeListener(PreMountEvent::class, $listener);
     }
 
     public function testTableComponentAllowsAddingColumnsViaEvent(): void
@@ -142,7 +103,7 @@ final class TableTest extends IbexaKernelTestCase
 
             $component->addColumn(
                 'extra_column',
-                'Extra Column Label',
+                static fn (): string => 'Extra Column Label',
                 static fn (object $item): string => 'Value: ' . ($item->name ?? 'unknown')
             );
         };
@@ -177,13 +138,13 @@ final class TableTest extends IbexaKernelTestCase
 
             $component->addColumn(
                 'low_priority',
-                'Low Priority Column',
+                static fn (): string => 'Low Priority Column',
                 static fn (): string => 'Low',
                 10
             );
             $component->addColumn(
                 'high_priority',
-                'High Priority Column',
+                static fn (): string => 'High Priority Column',
                 static fn (): string => 'High',
                 100
             );

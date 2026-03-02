@@ -9,9 +9,6 @@ declare(strict_types=1);
 namespace Ibexa\Bundle\TwigComponents\Templating\Twig\Components;
 
 use Ibexa\Bundle\TwigComponents\Templating\Twig\Components\Table\Column;
-use JMS\TranslationBundle\Model\Message;
-use JMS\TranslationBundle\Translation\TranslationContainerInterface;
-use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 
@@ -19,19 +16,14 @@ use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
     name: 'ibexa.Table',
     template: '@ibexadesign/twig_components/table.html.twig',
 )]
-final class Table implements TranslationContainerInterface
+final class Table
 {
     /** @var iterable<object> */
-    public iterable $data = [];
+    #[ExposeInTemplate]
+    private iterable $data = [];
 
     /** @var class-string|null */
     private ?string $dataType = null;
-
-    public TranslatableMessage $emptyStateTitle;
-
-    public ?TranslatableMessage $emptyStateDescription = null;
-
-    public ?string $emptyStateExtraActions = null;
 
     /** @var array<string, mixed> */
     public array $parameters = [];
@@ -39,10 +31,8 @@ final class Table implements TranslationContainerInterface
     /** @var array<string, Column> */
     private array $columns = [];
 
-    public function __construct()
-    {
-        $this->emptyStateTitle = new TranslatableMessage('table.component.default.empty_title', [], 'ibexa_admin_ui');
-    }
+    /** @var array<string, Column>|null */
+    private ?array $orderedColumns = null;
 
     /**
      * @param iterable<object> $data
@@ -54,9 +44,20 @@ final class Table implements TranslationContainerInterface
         }
     }
 
+    /**
+     * @return iterable<object>
+     */
+    public function getData(): iterable
+    {
+        return $this->data;
+    }
+
+    /**
+     * @return class-string|null
+     */
     public function getDataType(): ?string
     {
-        return $this->dataType ??= $this->inferDataType();
+        return $this->dataType ??= $this->resolveDataType();
     }
 
     /**
@@ -65,32 +66,50 @@ final class Table implements TranslationContainerInterface
     #[ExposeInTemplate('columns')]
     public function getColumns(): array
     {
-        uasort($this->columns, static fn (Column $a, Column $b): int => $b->priority <=> $a->priority);
-
-        return $this->columns;
+        return $this->orderedColumns ??= $this->orderColumns();
     }
 
     /**
-     * @param callable(mixed): string $renderer
+     * @return array<string, Column>
      */
-    public function addColumn(string $identifier, string $label, callable $renderer, int $priority = 0): self
+    private function orderColumns(): array
     {
-        $this->columns[$identifier] = new Column($identifier, $label, $renderer, $priority);
+        $columns = $this->columns;
+
+        uasort($columns, static fn (Column $a, Column $b): int => $b->priority <=> $a->priority);
+
+        return $columns;
+    }
+
+    /**
+     * @phpstan-param callable(Column): string $label
+     * @phpstan-param callable(mixed, Column): string $renderer
+     */
+    public function addColumn(string $identifier, callable $label, callable $renderer, int $priority = 0): self
+    {
+        $this->orderedColumns = null;
+        $this->columns[$identifier] = new Column(
+            $identifier,
+            $label(...),
+            $renderer(...),
+            $priority,
+        );
 
         return $this;
     }
 
     public function removeColumn(string $identifier): self
     {
+        $this->orderedColumns = null;
         unset($this->columns[$identifier]);
 
         return $this;
     }
 
     /**
-     * @return class-string|null
+     * @phpstan-return class-string|null
      */
-    private function inferDataType(): ?string
+    private function resolveDataType(): ?string
     {
         $firstItem = null;
         foreach ($this->data as $item) {
@@ -123,14 +142,11 @@ final class Table implements TranslationContainerInterface
 
     public function renderCell(Column $column, mixed $item): string
     {
-        return (string) ($column->renderer)($item);
+        return ($column->renderer)($item, $column);
     }
 
-    public static function getTranslationMessages(): array
+    public function renderLabel(Column $column): string
     {
-        return [
-            Message::create('table.component.default.empty_title', 'ibexa_admin_ui')
-                ->setDesc('Empty table title'),
-        ];
+        return ($column->label)($column);
     }
 }

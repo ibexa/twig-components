@@ -8,15 +8,18 @@ declare(strict_types=1);
 
 namespace Ibexa\Bundle\TwigComponents\Templating\Twig\Components\Table;
 
+use Closure;
+
 final class Column
 {
     /**
-     * @param callable(mixed): string $renderer
+     * @phpstan-param Closure(Column): string $label
+     * @phpstan-param Closure(mixed, Column): string $renderer
      */
     public function __construct(
         public string $identifier,
-        public string $label,
-        public $renderer,
+        public Closure $label,
+        public Closure $renderer,
         public int $priority = 0,
     ) {
     }
