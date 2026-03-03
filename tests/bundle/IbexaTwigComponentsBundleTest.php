@@ -18,19 +18,17 @@ final class IbexaTwigComponentsBundleTest extends TestCase
 {
     public function testBuildThrowsExceptionIfTwigBundleIsNotEnabled(): void
     {
+        $container = new ContainerBuilder();
+        $bundle = new IbexaTwigComponentsBundle();
+
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('IbexaTwigComponentsBundle requires TwigBundle. Please enable it in your bundles.php file.');
 
-        $container = new ContainerBuilder();
-        $bundle = new IbexaTwigComponentsBundle();
         $bundle->build($container);
     }
 
     public function testBuildThrowsExceptionIfTwigComponentBundleIsNotEnabled(): void
     {
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('IbexaTwigComponentsBundle requires TwigComponentBundle (symfony/ux-twig-component). Please enable it in your bundles.php file.');
-
         $container = new ContainerBuilder();
         $container->registerExtension(new class() extends Extension {
             public function load(array $configs, ContainerBuilder $container): void
@@ -44,6 +42,10 @@ final class IbexaTwigComponentsBundleTest extends TestCase
         });
 
         $bundle = new IbexaTwigComponentsBundle();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('IbexaTwigComponentsBundle requires TwigComponentBundle (symfony/ux-twig-component). Please enable it in your bundles.php file.');
+
         $bundle->build($container);
     }
 
