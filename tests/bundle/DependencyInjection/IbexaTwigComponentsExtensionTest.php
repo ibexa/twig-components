@@ -89,12 +89,7 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
 
     public function testInvalidComponentTypeThrowsException(): void
     {
-        $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessage(
-            'Unrecognized option "invalid_component" under "ibexa_twig_components.ibexa_twig_components.invalid_group'
-        );
-
-        $this->load([
+        $config = [
             'ibexa_twig_components' => [
                 'invalid_group' => [
                     'invalid_component' => [
@@ -103,7 +98,14 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
                     ],
                 ],
             ],
-        ]);
+        ];
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage(
+            'Unrecognized option "invalid_component" under "ibexa_twig_components.ibexa_twig_components.invalid_group'
+        );
+
+        $this->load($config);
     }
 
     public function testAttributeCausesTagToBeAdded(): void
