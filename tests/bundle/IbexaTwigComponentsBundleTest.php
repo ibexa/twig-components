@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Ibexa\Tests\Bundle\TwigComponents;
 
-use Ibexa\Bundle\TwigComponents\DependencyInjection\Compiler\ComponentPass;
 use Ibexa\Bundle\TwigComponents\IbexaTwigComponentsBundle;
 use LogicException;
 use PHPUnit\Framework\TestCase;
