@@ -17,6 +17,7 @@ use Ibexa\TwigComponents\Component\LinkComponent;
 use Ibexa\TwigComponents\Component\MenuComponent;
 use Ibexa\TwigComponents\Component\ScriptComponent;
 use Ibexa\TwigComponents\Component\TemplateComponent;
+use LogicException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -73,6 +74,14 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
 
     public function prepend(ContainerBuilder $container): void
     {
+        if (!$container->hasExtension('twig')) {
+            throw new LogicException('IbexaTwigComponentsBundle requires TwigBundle. Please enable it in your bundles.php file.');
+        }
+
+        if (!$container->hasExtension('twig_component')) {
+            throw new LogicException('IbexaTwigComponentsBundle requires TwigComponentBundle (symfony/ux-twig-component). Please enable it in your bundles.php file.');
+        }
+
         $this->prependDefaultConfiguration($container);
         $this->prependJMSTranslation($container);
     }
