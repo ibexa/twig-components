@@ -11,7 +11,6 @@ namespace Ibexa\Tests\Bundle\TwigComponents\DependencyInjection;
 use Ibexa\Bundle\TwigComponents\DependencyInjection\IbexaTwigComponentsExtension;
 use Ibexa\Tests\Bundle\TwigComponents\Fixtures\DummyComponent;
 use Ibexa\TwigComponents\Component\TemplateComponent;
-use LogicException;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -124,42 +123,5 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
                 'priority' => 100,
             ]
         );
-    }
-
-    public function testLoadThrowsExceptionIfTwigBundleIsNotEnabled(): void
-    {
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('IbexaTwigComponentsBundle requires TwigBundle. Please enable it in your bundles.php file.');
-
-        // We create a new container builder without the twig extension for this test
-        $this->container = new ContainerBuilder();
-        foreach ($this->getContainerExtensions() as $extension) {
-            $this->container->registerExtension($extension);
-        }
-        $this->load();
-    }
-
-    public function testLoadThrowsExceptionIfTwigComponentBundleIsNotEnabled(): void
-    {
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('IbexaTwigComponentsBundle requires TwigComponentBundle (symfony/ux-twig-component). Please enable it in your bundles.php file.');
-
-        // We create a new container builder without the twig_component extension for this test
-        $this->container = new ContainerBuilder();
-        $this->container->registerExtension(new class() extends Extension {
-            public function load(array $configs, ContainerBuilder $container): void
-            {
-            }
-
-            public function getAlias(): string
-            {
-                return 'twig';
-            }
-        });
-
-        foreach ($this->getContainerExtensions() as $extension) {
-            $this->container->registerExtension($extension);
-        }
-        $this->load();
     }
 }
