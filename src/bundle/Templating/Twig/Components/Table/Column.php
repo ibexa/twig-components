@@ -10,7 +10,7 @@ namespace Ibexa\Bundle\TwigComponents\Templating\Twig\Components\Table;
 
 use Closure;
 
-final class Column
+final readonly class Column
 {
     /**
      * @phpstan-param Closure(Column): string $label
