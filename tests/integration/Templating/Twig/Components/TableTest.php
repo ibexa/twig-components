@@ -61,7 +61,9 @@ final class TableTest extends IbexaKernelTestCase
             ],
         );
 
-        self::assertStringContainsString('ibexa-table', $rendered->toString());
+        $html = $rendered->toString();
+        self::assertStringContainsString('ibexa-table', $html);
+        $this->assertMatchesSnapshot($html, 'table_renders');
     }
 
     public function testTableComponentInfersDataType(): void
@@ -87,8 +89,22 @@ final class TableTest extends IbexaKernelTestCase
             ],
         );
 
-        $html = $rendered->toString();
-        self::assertStringContainsString('ibexa-table__empty-table-cell', $html);
+        $this->assertMatchesSnapshot($rendered->toString(), 'table_empty_state');
+    }
+
+    private function assertMatchesSnapshot(string $actual, string $snapshotName): void
+    {
+        $snapshotPath = __DIR__ . '/__snapshots__/' . $snapshotName . '.html';
+
+        if (!file_exists($snapshotPath)) {
+            file_put_contents($snapshotPath, $actual);
+            self::markTestIncomplete('Snapshot created: ' . $snapshotPath);
+        }
+
+        $expected = file_get_contents($snapshotPath);
+
+        // Normalize whitespace for easier comparison if needed, or just compare strictly
+        self::assertSame($expected, $actual, 'Snapshot comparison failed for ' . $snapshotName);
     }
 
     public function testTableComponentAllowsAddingColumnsViaEvent(): void
@@ -122,6 +138,7 @@ final class TableTest extends IbexaKernelTestCase
         $html = $rendered->toString();
         self::assertStringContainsString('Extra Column Label', $html);
         self::assertStringContainsString('Value: Foo', $html);
+        $this->assertMatchesSnapshot($html, 'table_with_extra_columns');
 
         $dispatcher->removeListener(PreMountEvent::class, $listener);
     }
@@ -159,11 +176,12 @@ final class TableTest extends IbexaKernelTestCase
         );
 
         $html = $rendered->toString();
-        // High Priority Column should come before Low Priority Column
         self::assertGreaterThan(
             strpos($html, 'High Priority Column'),
-            strpos($html, 'Low Priority Column')
+            strpos($html, 'Low Priority Column'),
+            'High Priority Column should come before Low Priority Column'
         );
+        $this->assertMatchesSnapshot($html, 'table_column_priority');
 
         $dispatcher->removeListener(PreMountEvent::class, $listener);
     }
