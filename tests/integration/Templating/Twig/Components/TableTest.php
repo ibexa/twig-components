@@ -88,7 +88,7 @@ final class TableTest extends IbexaKernelTestCase
         );
 
         $html = $rendered->toString();
-        self::assertStringContainsString('ibexa-empty-state', $html);
+        self::assertStringContainsString('ibexa-table__empty-table-cell', $html);
     }
 
     public function testTableComponentAllowsAddingColumnsViaEvent(): void
