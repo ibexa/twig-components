@@ -11,16 +11,15 @@
         "php": ">=8.3",
         "ibexa/core": "~5.0.x-dev",
         "ibexa/design-engine": "~5.0.x-dev",
-        "jms/translation-bundle": "^2.4",
         "knplabs/knp-menu": "^3.8",
-        "symfony/asset": "^7.3",
-        "symfony/config": "^7.3",
-        "symfony/dependency-injection": "^7.3",
-        "symfony/event-dispatcher": "^7.3",
-        "symfony/http-foundation": "^7.3",
-        "symfony/http-kernel": "^7.3",
+        "symfony/asset": "^7.4",
+        "symfony/config": "^7.4",
+        "symfony/dependency-injection": "^7.4",
+        "symfony/event-dispatcher": "^7.4",
+        "symfony/http-foundation": "^7.4",
+        "symfony/http-kernel": "^7.4",
         "symfony/ux-twig-component": "^2.32",
-        "symfony/yaml": "^7.3"
+        "symfony/yaml": "^7.4"
     },
     "require-dev": {
         "deptrac/deptrac": "^4",
