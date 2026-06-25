@@ -13,9 +13,38 @@ use Ibexa\Tests\Bundle\TwigComponents\Fixtures\DummyComponent;
 use Ibexa\TwigComponents\Component\TemplateComponent;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 
 final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->container->registerExtension(new class() extends Extension {
+            public function load(array $configs, ContainerBuilder $container): void
+            {
+            }
+
+            public function getAlias(): string
+            {
+                return 'twig';
+            }
+        });
+
+        $this->container->registerExtension(new class() extends Extension {
+            public function load(array $configs, ContainerBuilder $container): void
+            {
+            }
+
+            public function getAlias(): string
+            {
+                return 'twig_component';
+            }
+        });
+    }
+
     protected function getContainerExtensions(): array
     {
         return [new IbexaTwigComponentsExtension()];
@@ -60,12 +89,7 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
 
     public function testInvalidComponentTypeThrowsException(): void
     {
-        $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessage(
-            'Unrecognized option "invalid_component" under "ibexa_twig_components.ibexa_twig_components.invalid_group'
-        );
-
-        $this->load([
+        $config = [
             'ibexa_twig_components' => [
                 'invalid_group' => [
                     'invalid_component' => [
@@ -74,7 +98,14 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
                     ],
                 ],
             ],
-        ]);
+        ];
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage(
+            'Unrecognized option "invalid_component" under "ibexa_twig_components.ibexa_twig_components.invalid_group'
+        );
+
+        $this->load($config);
     }
 
     public function testAttributeCausesTagToBeAdded(): void
