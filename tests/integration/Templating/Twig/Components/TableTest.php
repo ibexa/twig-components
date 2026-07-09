@@ -15,6 +15,7 @@ use Ibexa\Contracts\Test\Core\IbexaKernelTestCase;
 use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessServiceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\UX\TwigComponent\Event\PostMountEvent;
 use Symfony\UX\TwigComponent\Event\PreMountEvent;
 use Symfony\UX\TwigComponent\Test\InteractsWithTwigComponents;
 
@@ -141,6 +142,156 @@ final class TableTest extends IbexaKernelTestCase
         $this->assertMatchesSnapshot($html, 'table_with_extra_columns');
 
         $dispatcher->removeListener(PreMountEvent::class, $listener);
+    }
+
+    public function testTableComponentRendersHeadline(): void
+    {
+        $rendered = $this->renderTwigComponent(
+            name: 'ibexa.Table',
+            data: [
+                'data' => [],
+                'headline' => 'Open drafts',
+            ],
+        );
+
+        $html = $rendered->toString();
+        self::assertStringContainsString('<div class="ibexa-table-header">', $html);
+        self::assertStringContainsString('<div class="ibexa-table-header__headline">Open drafts</div>', $html);
+        $this->assertMatchesSnapshot($html, 'table_with_headline');
+    }
+
+    public function testTableComponentHeadlineCanBeOverriddenByListener(): void
+    {
+        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
+        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
+        $listener = static function (PostMountEvent $event): void {
+            $component = $event->getComponent();
+            if (!$component instanceof Table) {
+                return;
+            }
+
+            $component->headline = 'Headline from listener';
+        };
+        $dispatcher->addListener(PostMountEvent::class, $listener);
+
+        try {
+            $html = $this
+                ->renderTwigComponent(
+                    name: 'ibexa.Table',
+                    data: [
+                        'data' => [],
+                        'headline' => 'Default headline',
+                    ],
+                )
+                ->toString();
+        } finally {
+            $dispatcher->removeListener(PostMountEvent::class, $listener);
+        }
+
+        self::assertStringContainsString('Headline from listener', $html);
+        self::assertStringNotContainsString('Default headline', $html);
+    }
+
+    public function testTableComponentAppliesCustomTableClass(): void
+    {
+        $html = $this
+            ->renderTwigComponent(
+                name: 'ibexa.Table',
+                data: [
+                    'data' => [],
+                    'class' => 'ibexa-table--draft-conflict',
+                ],
+            )
+            ->toString();
+
+        self::assertStringContainsString('<table class="ibexa-table table ibexa-table--draft-conflict">', $html);
+        self::assertStringNotContainsString('ibexa-table--last-column-sticky', $html);
+    }
+
+    public function testTableComponentRendersColumnOptionClasses(): void
+    {
+        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
+        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
+        $listener = static function (PostMountEvent $event): void {
+            $component = $event->getComponent();
+            if (!$component instanceof Table) {
+                return;
+            }
+
+            $component->addColumn(
+                'checkbox',
+                static fn (): string => 'Checkbox',
+                static fn (): string => 'X',
+                110,
+                ['header_class' => 'ibexa-table__header-cell--checkbox', 'cell_class' => 'ibexa-table__cell--checkbox']
+            );
+        };
+        $dispatcher->addListener(PostMountEvent::class, $listener);
+
+        try {
+            $html = $this
+                ->renderTwigComponent(
+                    name: 'ibexa.Table',
+                    data: [
+                        'data' => [new \stdClass()],
+                    ],
+                )
+                ->toString();
+        } finally {
+            $dispatcher->removeListener(PostMountEvent::class, $listener);
+        }
+
+        self::assertStringContainsString('ibexa-table__header-cell--checkbox', $html);
+        self::assertStringContainsString('ibexa-table__cell--checkbox', $html);
+    }
+
+    public function testListenersCanGuardOnTypeAndUseFullData(): void
+    {
+        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
+        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
+        $listener = static function (PostMountEvent $event): void {
+            $component = $event->getComponent();
+            if (!$component instanceof Table || $component->type !== 'versions') {
+                return;
+            }
+
+            $datasetSize = iterator_count(new \ArrayIterator([...$component->getFullData()]));
+            $component->addColumn(
+                'dataset_size',
+                static fn (): string => sprintf('Dataset of %d (%s)', $datasetSize, $component->variant),
+                static fn (): string => '-'
+            );
+        };
+        $dispatcher->addListener(PostMountEvent::class, $listener);
+
+        try {
+            $renderedPage = [new \stdClass()];
+            $html = $this
+                ->renderTwigComponent(
+                    name: 'ibexa.Table',
+                    data: [
+                        'data' => $renderedPage,
+                        'fullData' => [...$renderedPage, new \stdClass(), new \stdClass()],
+                        'type' => 'versions',
+                        'variant' => 'draft',
+                    ],
+                )
+                ->toString();
+
+            $unguardedHtml = $this
+                ->renderTwigComponent(
+                    name: 'ibexa.Table',
+                    data: [
+                        'data' => $renderedPage,
+                    ],
+                )
+                ->toString();
+        } finally {
+            $dispatcher->removeListener(PostMountEvent::class, $listener);
+        }
+
+        self::assertStringContainsString('Dataset of 3 (draft)', $html);
+        self::assertStringNotContainsString('Dataset of', $unguardedHtml);
     }
 
     public function testTableComponentRespectsColumnPriorityViaEvent(): void
