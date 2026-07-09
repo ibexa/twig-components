@@ -15,12 +15,17 @@ final readonly class Column
     /**
      * @phpstan-param Closure(Column): string $label
      * @phpstan-param Closure(mixed, Column): string $renderer
+     *
+     * @param array<string, string> $options presentation hints consumed by the table template;
+     *        supported keys: "header_class" (extra CSS classes for the column's <th>),
+     *        "cell_class" (extra CSS classes for the column's <td>)
      */
     public function __construct(
         public string $identifier,
         public Closure $label,
         public Closure $renderer,
         public int $priority = 0,
+        public array $options = [],
     ) {
     }
 }

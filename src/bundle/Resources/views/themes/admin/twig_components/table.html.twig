@@ -1,11 +1,16 @@
 {% trans_default_domain 'ibexa_admin_ui' %}
 
-<div class="ibexa-scrollable-wrapper">
-    <table class="ibexa-table table ibexa-table--last-column-sticky">
+{% block header %}{% if headline is not null %}<div class="ibexa-table-header">
+    <div class="ibexa-table-header__headline">{{ headline }}</div>
+    {% block header_actions %}{% endblock %}
+</div>
+{% endif %}{% endblock %}<div class="ibexa-scrollable-wrapper">{% block before_table %}{% endblock %}
+
+    <table class="{{ table_class }}">
         <thead>
             <tr class="ibexa-table__row ibexa-table__row--header">
                 {% for column in columns %}
-                    <th class="ibexa-table__header-cell {{ loop.last ? 'ibexa-table__header-cell--no-min-width' }}">
+                    <th class="ibexa-table__header-cell {{ loop.last ? 'ibexa-table__header-cell--no-min-width' }}{% if column.options.header_class is defined %} {{ column.options.header_class }}{% endif %}">
                         <span class="ibexa-table__header-cell-content">
                             {{ this.renderLabel(column)|raw }}
                         </span>
@@ -17,7 +22,7 @@
             {% for item in data %}
                 <tr class="ibexa-table__row">
                     {% for column in columns %}
-                        <td class="ibexa-table__cell {{ loop.last ? 'ibexa-table__cell--has-action-btns' }}">
+                        <td class="ibexa-table__cell {{ loop.last ? 'ibexa-table__cell--has-action-btns' }}{% if column.options.cell_class is defined %} {{ column.options.cell_class }}{% endif %}">
                             {{ this.renderCell(column, item)|raw }}
                         </td>
                     {% endfor %}
@@ -43,5 +48,6 @@
                 {% endblock empty_state_row %}
             {% endfor %}
         </tbody>
-    </table>
+    </table>{% block after_table %}{% endblock %}
+
 </div>

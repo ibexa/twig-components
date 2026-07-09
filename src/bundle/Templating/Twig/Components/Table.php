@@ -18,9 +18,36 @@ use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 )]
 final class Table
 {
+    private const string BASE_CLASS = 'ibexa-table table';
+    private const string DEFAULT_MODIFIER_CLASS = 'ibexa-table--last-column-sticky';
+
+    /**
+     * Identifies the table to PostMount listeners. Guard on this instead of
+     * {@see getDataType()} when different tables share a row type or may be empty.
+     */
+    public ?string $type = null;
+
+    /** Sub-flavour of a table type (e.g. "draft"/"published"/"archived" for one type). */
+    public ?string $variant = null;
+
+    /**
+     * Rendered as the table header when non-null; PostMount listeners may overwrite it
+     * to replace the headline of a table they contribute columns to.
+     */
+    public ?string $headline = null;
+
+    /**
+     * Modifier CSS classes for the <table> element; null keeps the default
+     * "ibexa-table--last-column-sticky". The "ibexa-table table" base is always applied.
+     */
+    public ?string $class = null;
+
     /** @var iterable<object> */
     #[ExposeInTemplate]
     private iterable $data = [];
+
+    /** @var iterable<object>|null */
+    private ?iterable $fullData = null;
 
     /** @var class-string|null */
     private ?string $dataType = null;
@@ -35,13 +62,17 @@ final class Table
     private ?array $orderedColumns = null;
 
     /**
-     * @param iterable<object> $data
+     * @param iterable<object> $data rows rendered by the table (e.g. the current pagination page)
+     * @param iterable<object>|null $fullData whole dataset the rendered rows were taken from;
+     *        lets listeners decide whether their column applies independently of pagination
      */
-    public function mount(iterable $data = []): void
+    public function mount(iterable $data = [], ?iterable $fullData = null): void
     {
         if ($data !== []) {
             $this->data = $data;
         }
+
+        $this->fullData = $fullData;
     }
 
     /**
@@ -50,6 +81,20 @@ final class Table
     public function getData(): iterable
     {
         return $this->data;
+    }
+
+    /**
+     * @return iterable<object>
+     */
+    public function getFullData(): iterable
+    {
+        return $this->fullData ?? $this->data;
+    }
+
+    #[ExposeInTemplate('table_class')]
+    public function getTableClass(): string
+    {
+        return trim(self::BASE_CLASS . ' ' . ($this->class ?? self::DEFAULT_MODIFIER_CLASS));
     }
 
     /**
@@ -84,15 +129,23 @@ final class Table
     /**
      * @phpstan-param callable(Column): string $label
      * @phpstan-param callable(mixed, Column): string $renderer
+     *
+     * @param array<string, string> $options presentation hints, see {@see Column::__construct()}
      */
-    public function addColumn(string $identifier, callable $label, callable $renderer, int $priority = 0): self
-    {
+    public function addColumn(
+        string $identifier,
+        callable $label,
+        callable $renderer,
+        int $priority = 0,
+        array $options = []
+    ): self {
         $this->orderedColumns = null;
         $this->columns[$identifier] = new Column(
             $identifier,
             $label(...),
             $renderer(...),
             $priority,
+            $options,
         );
 
         return $this;
