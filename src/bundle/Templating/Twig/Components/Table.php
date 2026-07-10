@@ -12,6 +12,9 @@ use Ibexa\Bundle\TwigComponents\Templating\Twig\Components\Table\Column;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 
+/**
+ * @phpstan-import-type ColumnOptions from Column
+ */
 #[AsTwigComponent(
     name: 'ibexa.Table',
     template: '@ibexadesign/twig_components/table.html.twig',
@@ -132,8 +135,7 @@ final class Table
     /**
      * @phpstan-param callable(Column): string $label
      * @phpstan-param callable(mixed, Column): string $renderer
-     * @phpstan-param array{header_class?: string, cell_class?: string} $options presentation
-     *        hints, see {@see Column::__construct()}
+     * @phpstan-param ColumnOptions $options presentation hints, see {@see Column::__construct()}
      */
     public function addColumn(
         string $identifier,
