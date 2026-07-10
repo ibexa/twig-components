@@ -56,10 +56,8 @@ final class TableFormWidgetRenderingTest extends IbexaKernelTestCase
 
     public function testFormWidgetCellIsRenderedOncePerRowAndNotDuplicatedByFormEnd(): void
     {
-        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
-        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
-        $twig = self::getContainer()->get('twig');
-        self::assertInstanceOf(Environment::class, $twig);
+        $dispatcher = self::getIbexaTestCore()->getServiceByClassName(EventDispatcherInterface::class);
+        $twig = self::getIbexaTestCore()->getServiceByClassName(Environment::class);
         $formFactory = self::getIbexaTestCore()->getServiceByClassName(FormFactoryInterface::class);
 
         $versionsBuilder = $formFactory

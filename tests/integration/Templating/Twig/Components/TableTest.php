@@ -110,8 +110,7 @@ final class TableTest extends IbexaKernelTestCase
 
     public function testTableComponentAllowsAddingColumnsViaEvent(): void
     {
-        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
-        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
+        $dispatcher = self::getIbexaTestCore()->getServiceByClassName(EventDispatcherInterface::class);
         $listener = static function (PreMountEvent $event): void {
             $component = $event->getComponent();
             if (!$component instanceof Table) {
@@ -162,8 +161,7 @@ final class TableTest extends IbexaKernelTestCase
 
     public function testTableComponentHeadlineCanBeOverriddenByListener(): void
     {
-        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
-        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
+        $dispatcher = self::getIbexaTestCore()->getServiceByClassName(EventDispatcherInterface::class);
         $listener = static function (PostMountEvent $event): void {
             $component = $event->getComponent();
             if (!$component instanceof Table) {
@@ -210,8 +208,7 @@ final class TableTest extends IbexaKernelTestCase
 
     public function testTableComponentRendersColumnOptionClasses(): void
     {
-        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
-        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
+        $dispatcher = self::getIbexaTestCore()->getServiceByClassName(EventDispatcherInterface::class);
         $listener = static function (PostMountEvent $event): void {
             $component = $event->getComponent();
             if (!$component instanceof Table) {
@@ -247,15 +244,14 @@ final class TableTest extends IbexaKernelTestCase
 
     public function testListenersCanGuardOnTypeAndUseFullData(): void
     {
-        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
-        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
+        $dispatcher = self::getIbexaTestCore()->getServiceByClassName(EventDispatcherInterface::class);
         $listener = static function (PostMountEvent $event): void {
             $component = $event->getComponent();
             if (!$component instanceof Table || $component->type !== 'versions') {
                 return;
             }
 
-            $datasetSize = iterator_count(new \ArrayIterator([...$component->getFullData()]));
+            $datasetSize = iterator_count(new \ArrayIterator([...$component->getFullData() ?? $component->getData()]));
             $component->addColumn(
                 'dataset_size',
                 static fn (): string => sprintf('Dataset of %d (%s)', $datasetSize, $component->variant),
@@ -296,8 +292,7 @@ final class TableTest extends IbexaKernelTestCase
 
     public function testTableComponentRespectsColumnPriorityViaEvent(): void
     {
-        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
-        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
+        $dispatcher = self::getIbexaTestCore()->getServiceByClassName(EventDispatcherInterface::class);
         $listener = static function (PreMountEvent $event): void {
             $component = $event->getComponent();
             if (!$component instanceof Table) {

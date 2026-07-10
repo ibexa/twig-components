@@ -19,9 +19,11 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\UX\TwigComponent\TwigComponentBundle;
+use Twig\Environment;
 
 /**
  * Variant of {@see TwigComponentsIbexaTestKernel} with Symfony Forms enabled, for tests
@@ -42,6 +44,8 @@ final class FormAwareTwigComponentsIbexaTestKernel extends IbexaTestKernel
         yield SiteAccessServiceInterface::class;
         yield ConfigResolverInterface::class;
         yield FormFactoryInterface::class;
+        yield EventDispatcherInterface::class;
+        yield Environment::class;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void

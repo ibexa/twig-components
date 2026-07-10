@@ -13,31 +13,49 @@ use PHPUnit\Framework\TestCase;
 
 final class TableTest extends TestCase
 {
-    public function testTableClassDefaultsToLastColumnSticky(): void
-    {
+    /**
+     * @dataProvider provideTableClass
+     */
+    public function testTableClassAppliesModifierToBaseClasses(
+        ?string $classProp,
+        string $expectedTableClass
+    ): void {
         $table = new Table();
+        if ($classProp !== null) {
+            $table->class = $classProp;
+        }
         $table->mount();
 
-        self::assertSame('ibexa-table table ibexa-table--last-column-sticky', $table->getTableClass());
+        self::assertSame($expectedTableClass, $table->getTableClass());
     }
 
-    public function testTableClassReplacesModifierWhenClassPropIsSet(): void
+    /**
+     * @return iterable<string, array{?string, string}>
+     */
+    public static function provideTableClass(): iterable
     {
-        $table = new Table();
-        $table->class = 'ibexa-table--draft-conflict mb-3';
-        $table->mount();
+        yield 'default modifier' => [
+            null,
+            'ibexa-table table ibexa-table--last-column-sticky',
+        ];
 
-        self::assertSame('ibexa-table table ibexa-table--draft-conflict mb-3', $table->getTableClass());
+        yield 'custom modifier replaces the default' => [
+            'ibexa-table--draft-conflict mb-3',
+            'ibexa-table table ibexa-table--draft-conflict mb-3',
+        ];
+
+        yield 'empty string clears the modifier' => [
+            '',
+            'ibexa-table table',
+        ];
     }
 
-    public function testFullDataFallsBackToRenderedData(): void
+    public function testFullDataIsNullWhenMountSiteDoesNotProvideIt(): void
     {
-        $rows = [new \stdClass()];
-
         $table = new Table();
-        $table->mount($rows);
+        $table->mount([new \stdClass()]);
 
-        self::assertSame($rows, $table->getFullData());
+        self::assertNull($table->getFullData());
     }
 
     public function testFullDataIsExposedIndependentlyOfRenderedData(): void

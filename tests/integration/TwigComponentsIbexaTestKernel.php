@@ -14,7 +14,9 @@ use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Contracts\Test\Core\IbexaTestKernel;
 use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessServiceInterface;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\UX\TwigComponent\TwigComponentBundle;
+use Twig\Environment;
 
 final class TwigComponentsIbexaTestKernel extends IbexaTestKernel
 {
@@ -30,6 +32,8 @@ final class TwigComponentsIbexaTestKernel extends IbexaTestKernel
     {
         yield SiteAccessServiceInterface::class;
         yield ConfigResolverInterface::class;
+        yield EventDispatcherInterface::class;
+        yield Environment::class;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
