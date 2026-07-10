@@ -19,7 +19,6 @@ use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 final class Table
 {
     private const string BASE_CLASS = 'ibexa-table table';
-    private const string DEFAULT_MODIFIER_CLASS = 'ibexa-table--last-column-sticky';
 
     /**
      * Identifies the table to PostMount listeners. Guard on this instead of
@@ -37,10 +36,10 @@ final class Table
     public ?string $headline = null;
 
     /**
-     * Modifier CSS classes for the <table> element; null keeps the default
-     * "ibexa-table--last-column-sticky". The "ibexa-table table" base is always applied.
+     * Modifier CSS classes for the <table> element; pass '' to render the bare base classes.
+     * The "ibexa-table table" base is always applied.
      */
-    public ?string $class = null;
+    public string $class = 'ibexa-table--last-column-sticky';
 
     /** @var iterable<object> */
     #[ExposeInTemplate]
@@ -84,17 +83,21 @@ final class Table
     }
 
     /**
-     * @return iterable<object>
+     * Whole dataset the rendered rows were taken from, or null when the mount site
+     * did not provide one — callers decide explicitly whether falling back to
+     * {@see getData()} (page-scoped rows) is acceptable for their use case.
+     *
+     * @return iterable<object>|null
      */
-    public function getFullData(): iterable
+    public function getFullData(): ?iterable
     {
-        return $this->fullData ?? $this->data;
+        return $this->fullData;
     }
 
     #[ExposeInTemplate('table_class')]
     public function getTableClass(): string
     {
-        return trim(self::BASE_CLASS . ' ' . ($this->class ?? self::DEFAULT_MODIFIER_CLASS));
+        return trim(self::BASE_CLASS . ' ' . $this->class);
     }
 
     /**
@@ -129,8 +132,8 @@ final class Table
     /**
      * @phpstan-param callable(Column): string $label
      * @phpstan-param callable(mixed, Column): string $renderer
-     *
-     * @param array<string, string> $options presentation hints, see {@see Column::__construct()}
+     * @phpstan-param array{header_class?: string, cell_class?: string} $options presentation
+     *        hints, see {@see Column::__construct()}
      */
     public function addColumn(
         string $identifier,

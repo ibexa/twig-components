@@ -10,14 +10,16 @@ namespace Ibexa\Bundle\TwigComponents\Templating\Twig\Components\Table;
 
 use Closure;
 
+/**
+ * @phpstan-type ColumnOptions array{header_class?: string, cell_class?: string}
+ */
 final readonly class Column
 {
     /**
      * @phpstan-param Closure(Column): string $label
      * @phpstan-param Closure(mixed, Column): string $renderer
-     *
-     * @param array<string, string> $options presentation hints consumed by the table template;
-     *        supported keys: "header_class" (extra CSS classes for the column's <th>),
+     * @phpstan-param ColumnOptions $options presentation hints consumed by the table template:
+     *        "header_class" (extra CSS classes for the column's <th>),
      *        "cell_class" (extra CSS classes for the column's <td>)
      */
     public function __construct(
@@ -25,6 +27,7 @@ final readonly class Column
         public Closure $label,
         public Closure $renderer,
         public int $priority = 0,
+        /** @var ColumnOptions */
         public array $options = [],
     ) {
     }
