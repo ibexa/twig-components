@@ -24,7 +24,6 @@ final class TableTest extends TestCase
         if ($classProp !== null) {
             $table->class = $classProp;
         }
-        $table->mount();
 
         self::assertSame($expectedTableClass, $table->getTableClass());
     }
@@ -73,43 +72,53 @@ final class TableTest extends TestCase
     public function testIdentityPropsDefaultToNull(): void
     {
         $table = new Table();
-        $table->mount();
 
         self::assertNull($table->type);
         self::assertNull($table->variant);
         self::assertNull($table->headline);
     }
 
-    public function testAddColumnCarriesOptionsToColumn(): void
+    /**
+     * @dataProvider provideColumnOptions
+     *
+     * @param array{header_class?: string, cell_class?: string}|null $options null = argument omitted
+     * @param array{header_class?: string, cell_class?: string} $expectedOptions
+     */
+    public function testAddColumnCarriesOptionsToColumn(?array $options, array $expectedOptions): void
     {
         $table = new Table();
-        $table->mount();
-        $table->addColumn(
-            'checkbox',
-            static fn (): string => 'Label',
-            static fn (): string => 'Cell',
-            110,
-            ['header_class' => 'custom-header', 'cell_class' => 'custom-cell']
-        );
+        if ($options === null) {
+            $table->addColumn(
+                'checkbox',
+                static fn (): string => 'Label',
+                static fn (): string => 'Cell'
+            );
+        } else {
+            $table->addColumn(
+                'checkbox',
+                static fn (): string => 'Label',
+                static fn (): string => 'Cell',
+                110,
+                $options
+            );
+        }
 
-        $column = $table->getColumns()['checkbox'];
-
-        self::assertSame(
-            ['header_class' => 'custom-header', 'cell_class' => 'custom-cell'],
-            $column->options
-        );
+        self::assertSame($expectedOptions, $table->getColumns()['checkbox']->options);
     }
 
-    public function testAddColumnDefaultsToEmptyOptions(): void
+    /**
+     * @return iterable<string, array{?array{header_class?: string, cell_class?: string}, array{header_class?: string, cell_class?: string}}>
+     */
+    public static function provideColumnOptions(): iterable
     {
-        $table = new Table();
-        $table->mount();
-        $table->addColumn(
-            'plain',
-            static fn (): string => 'Label',
-            static fn (): string => 'Cell'
-        );
+        yield 'passed options land on the column' => [
+            ['header_class' => 'custom-header', 'cell_class' => 'custom-cell'],
+            ['header_class' => 'custom-header', 'cell_class' => 'custom-cell'],
+        ];
 
-        self::assertSame([], $table->getColumns()['plain']->options);
+        yield 'omitted options default to an empty set' => [
+            null,
+            [],
+        ];
     }
 }
