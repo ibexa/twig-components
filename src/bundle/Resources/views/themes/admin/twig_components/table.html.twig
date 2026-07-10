@@ -13,7 +13,11 @@
         <thead>
             <tr class="ibexa-table__row ibexa-table__row--header">
                 {%~ for column in columns %}
-                    <th class="ibexa-table__header-cell {{ loop.last ? 'ibexa-table__header-cell--no-min-width' }}{% if column.options.header_class is defined %} {{ column.options.header_class }}{% endif %}">
+                    <th class="{{ [
+                        'ibexa-table__header-cell',
+                        loop.last ? 'ibexa-table__header-cell--no-min-width',
+                        column.options.header_class ?? '',
+                    ]|filter(class => class)|join(' ') }}">
                         <span class="ibexa-table__header-cell-content">
                             {{ this.renderLabel(column)|raw }}
                         </span>
@@ -25,7 +29,11 @@
             {%~ for item in data %}
                 <tr class="ibexa-table__row">
                     {%~ for column in columns %}
-                        <td class="ibexa-table__cell {{ loop.last ? 'ibexa-table__cell--has-action-btns' }}{% if column.options.cell_class is defined %} {{ column.options.cell_class }}{% endif %}">
+                        <td class="{{ [
+                            'ibexa-table__cell',
+                            loop.last ? 'ibexa-table__cell--has-action-btns',
+                            column.options.cell_class ?? '',
+                        ]|filter(class => class)|join(' ') }}">
                             {{ this.renderCell(column, item)|raw }}
                         </td>
                     {%~ endfor %}
