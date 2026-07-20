@@ -15,6 +15,7 @@ use Ibexa\Contracts\Test\Core\IbexaKernelTestCase;
 use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessServiceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\UX\TwigComponent\Event\PostMountEvent;
 use Symfony\UX\TwigComponent\Event\PreMountEvent;
 use Symfony\UX\TwigComponent\Test\InteractsWithTwigComponents;
 
@@ -54,14 +55,8 @@ final class TableTest extends IbexaKernelTestCase
 
     public function testTableComponentRenders(): void
     {
-        $rendered = $this->renderTwigComponent(
-            name: 'ibexa.Table',
-            data: [
-                'data' => [],
-            ],
-        );
+        $html = $this->renderTable(['data' => []]);
 
-        $html = $rendered->toString();
         self::assertStringContainsString('ibexa-table', $html);
         $this->assertMatchesSnapshot($html, 'table_renders');
     }
@@ -82,14 +77,203 @@ final class TableTest extends IbexaKernelTestCase
 
     public function testTableComponentRendersEmptyState(): void
     {
-        $rendered = $this->renderTwigComponent(
-            name: 'ibexa.Table',
-            data: [
-                'data' => [],
-            ],
+        $this->assertMatchesSnapshot($this->renderTable(['data' => []]), 'table_empty_state');
+    }
+
+    public function testTableComponentAllowsAddingColumnsViaEvent(): void
+    {
+        $item = new \stdClass();
+        $item->name = 'Foo';
+
+        $html = $this->withListener(
+            PreMountEvent::class,
+            static function (PreMountEvent $event): void {
+                $component = $event->getComponent();
+                if (!$component instanceof Table) {
+                    return;
+                }
+
+                $component->addColumn(
+                    'extra_column',
+                    static fn (): string => 'Extra Column Label',
+                    static fn (object $item): string => 'Value: ' . ($item->name ?? 'unknown')
+                );
+            },
+            fn (): string => $this->renderTable(['data' => [$item]])
         );
 
-        $this->assertMatchesSnapshot($rendered->toString(), 'table_empty_state');
+        self::assertStringContainsString('Extra Column Label', $html);
+        self::assertStringContainsString('Value: Foo', $html);
+        $this->assertMatchesSnapshot($html, 'table_with_extra_columns');
+    }
+
+    public function testTableComponentRendersHeadline(): void
+    {
+        $html = $this->renderTable([
+            'data' => [],
+            'headline' => 'Open drafts',
+        ]);
+
+        self::assertStringContainsString('<div class="ibexa-table-header">', $html);
+        self::assertStringContainsString('<div class="ibexa-table-header__headline">Open drafts</div>', $html);
+        $this->assertMatchesSnapshot($html, 'table_with_headline');
+    }
+
+    public function testTableComponentHeadlineCanBeOverriddenByListener(): void
+    {
+        $html = $this->withListener(
+            PostMountEvent::class,
+            static function (PostMountEvent $event): void {
+                $component = $event->getComponent();
+                if (!$component instanceof Table) {
+                    return;
+                }
+
+                $component->headline = 'Headline from listener';
+            },
+            fn (): string => $this->renderTable([
+                'data' => [],
+                'headline' => 'Default headline',
+            ])
+        );
+
+        self::assertStringContainsString('Headline from listener', $html);
+        self::assertStringNotContainsString('Default headline', $html);
+    }
+
+    public function testTableComponentAppliesCustomTableClass(): void
+    {
+        $html = $this->renderTable([
+            'data' => [],
+            'class' => 'ibexa-table--draft-conflict',
+        ]);
+
+        self::assertStringContainsString('<table class="ibexa-table table ibexa-table--draft-conflict">', $html);
+        self::assertStringNotContainsString('ibexa-table--last-column-sticky', $html);
+    }
+
+    public function testTableComponentRendersColumnOptionClasses(): void
+    {
+        $html = $this->withListener(
+            PostMountEvent::class,
+            static function (PostMountEvent $event): void {
+                $component = $event->getComponent();
+                if (!$component instanceof Table) {
+                    return;
+                }
+
+                $component->addColumn(
+                    'checkbox',
+                    static fn (): string => 'Checkbox',
+                    static fn (): string => 'X',
+                    110,
+                    ['header_class' => 'ibexa-table__header-cell--checkbox', 'cell_class' => 'ibexa-table__cell--checkbox']
+                );
+            },
+            fn (): string => $this->renderTable(['data' => [new \stdClass()]])
+        );
+
+        self::assertStringContainsString('ibexa-table__header-cell--checkbox', $html);
+        self::assertStringContainsString('ibexa-table__cell--checkbox', $html);
+    }
+
+    public function testListenersCanGuardOnTypeAndUseFullData(): void
+    {
+        $renderedPage = [new \stdClass()];
+
+        [$html, $unguardedHtml] = $this->withListener(
+            PostMountEvent::class,
+            static function (PostMountEvent $event): void {
+                $component = $event->getComponent();
+                if (!$component instanceof Table || $component->type !== 'versions') {
+                    return;
+                }
+
+                $datasetSize = iterator_count(new \ArrayIterator([...$component->getFullData() ?? $component->getData()]));
+                $component->addColumn(
+                    'dataset_size',
+                    static fn (): string => sprintf('Dataset of %d (%s)', $datasetSize, $component->variant),
+                    static fn (): string => '-'
+                );
+            },
+            fn (): array => [
+                $this->renderTable([
+                    'data' => $renderedPage,
+                    'fullData' => [...$renderedPage, new \stdClass(), new \stdClass()],
+                    'type' => 'versions',
+                    'variant' => 'draft',
+                ]),
+                $this->renderTable(['data' => $renderedPage]),
+            ]
+        );
+
+        self::assertStringContainsString('Dataset of 3 (draft)', $html);
+        self::assertStringNotContainsString('Dataset of', $unguardedHtml);
+    }
+
+    public function testTableComponentRespectsColumnPriorityViaEvent(): void
+    {
+        $html = $this->withListener(
+            PreMountEvent::class,
+            static function (PreMountEvent $event): void {
+                $component = $event->getComponent();
+                if (!$component instanceof Table) {
+                    return;
+                }
+
+                $component->addColumn(
+                    'low_priority',
+                    static fn (): string => 'Low Priority Column',
+                    static fn (): string => 'Low',
+                    10
+                );
+                $component->addColumn(
+                    'high_priority',
+                    static fn (): string => 'High Priority Column',
+                    static fn (): string => 'High',
+                    100
+                );
+            },
+            fn (): string => $this->renderTable(['data' => [new \stdClass()]])
+        );
+
+        self::assertGreaterThan(
+            strpos($html, 'High Priority Column'),
+            strpos($html, 'Low Priority Column'),
+            'High Priority Column should come before Low Priority Column'
+        );
+        $this->assertMatchesSnapshot($html, 'table_column_priority');
+    }
+
+    /**
+     * @param array<string, mixed> $componentData
+     */
+    private function renderTable(array $componentData): string
+    {
+        return $this->renderTwigComponent(name: 'ibexa.Table', data: $componentData)->toString();
+    }
+
+    /**
+     * Runs $render with the listener attached and ALWAYS detaches it afterwards,
+     * so a failing test cannot leak the listener into subsequent ones.
+     *
+     * @template TResult
+     *
+     * @param class-string $eventClass
+     * @param \Closure(): TResult $render
+     *
+     * @return TResult
+     */
+    private function withListener(string $eventClass, \Closure $listener, \Closure $render): mixed
+    {
+        $dispatcher = self::getIbexaTestCore()->getServiceByClassName(EventDispatcherInterface::class);
+        $dispatcher->addListener($eventClass, $listener);
+
+        try {
+            return $render();
+        } finally {
+            $dispatcher->removeListener($eventClass, $listener);
+        }
     }
 
     private function assertMatchesSnapshot(string $actual, string $snapshotName): void
@@ -103,86 +287,6 @@ final class TableTest extends IbexaKernelTestCase
 
         $expected = file_get_contents($snapshotPath);
 
-        // Normalize whitespace for easier comparison if needed, or just compare strictly
         self::assertSame($expected, $actual, 'Snapshot comparison failed for ' . $snapshotName);
-    }
-
-    public function testTableComponentAllowsAddingColumnsViaEvent(): void
-    {
-        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
-        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
-        $listener = static function (PreMountEvent $event): void {
-            $component = $event->getComponent();
-            if (!$component instanceof Table) {
-                return;
-            }
-
-            $component->addColumn(
-                'extra_column',
-                static fn (): string => 'Extra Column Label',
-                static fn (object $item): string => 'Value: ' . ($item->name ?? 'unknown')
-            );
-        };
-        $dispatcher->addListener(PreMountEvent::class, $listener);
-
-        $item = new \stdClass();
-        $item->name = 'Foo';
-
-        $rendered = $this->renderTwigComponent(
-            name: 'ibexa.Table',
-            data: [
-                'data' => [$item],
-            ],
-        );
-
-        $html = $rendered->toString();
-        self::assertStringContainsString('Extra Column Label', $html);
-        self::assertStringContainsString('Value: Foo', $html);
-        $this->assertMatchesSnapshot($html, 'table_with_extra_columns');
-
-        $dispatcher->removeListener(PreMountEvent::class, $listener);
-    }
-
-    public function testTableComponentRespectsColumnPriorityViaEvent(): void
-    {
-        $dispatcher = self::getContainer()->get(EventDispatcherInterface::class);
-        self::assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
-        $listener = static function (PreMountEvent $event): void {
-            $component = $event->getComponent();
-            if (!$component instanceof Table) {
-                return;
-            }
-
-            $component->addColumn(
-                'low_priority',
-                static fn (): string => 'Low Priority Column',
-                static fn (): string => 'Low',
-                10
-            );
-            $component->addColumn(
-                'high_priority',
-                static fn (): string => 'High Priority Column',
-                static fn (): string => 'High',
-                100
-            );
-        };
-        $dispatcher->addListener(PreMountEvent::class, $listener);
-
-        $rendered = $this->renderTwigComponent(
-            name: 'ibexa.Table',
-            data: [
-                'data' => [new \stdClass()],
-            ],
-        );
-
-        $html = $rendered->toString();
-        self::assertGreaterThan(
-            strpos($html, 'High Priority Column'),
-            strpos($html, 'Low Priority Column'),
-            'High Priority Column should come before Low Priority Column'
-        );
-        $this->assertMatchesSnapshot($html, 'table_column_priority');
-
-        $dispatcher->removeListener(PreMountEvent::class, $listener);
     }
 }
