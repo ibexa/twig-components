@@ -75,6 +75,7 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
     {
         $this->prependDefaultConfiguration($container);
         $this->prependJMSTranslation($container);
+        $this->prependTwigComponentConfiguration($container);
     }
 
     private function prependDefaultConfiguration(ContainerBuilder $container): void
@@ -103,6 +104,16 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
                 ],
             ],
         ]);
+    }
+
+    private function prependTwigComponentConfiguration(ContainerBuilder $container): void
+    {
+        if ($container->hasExtension('twig_component')) {
+            $container->prependExtensionConfig('twig_component', [
+                'anonymous_template_directory' => 'components/',
+                'defaults' => [],
+            ]);
+        }
     }
 
     private function shouldLoadTestServices(ContainerBuilder $container): bool

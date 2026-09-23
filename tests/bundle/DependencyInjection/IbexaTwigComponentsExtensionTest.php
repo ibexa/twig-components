@@ -126,4 +126,28 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
             ]
         );
     }
+
+    public function testPrependDoesNotAddTwigComponentConfigurationWhenExtensionIsNotRegistered(): void
+    {
+        $container = new ContainerBuilder();
+
+        (new IbexaTwigComponentsExtension())->prepend($container);
+
+        self::assertSame([], $container->getExtensionConfig('twig_component'));
+    }
+
+    public function testPrependAddsTwigComponentConfigurationWhenExtensionIsRegistered(): void
+    {
+        (new IbexaTwigComponentsExtension())->prepend($this->container);
+
+        $twigComponentConfig = $this->container->getExtensionConfig('twig_component');
+        self::assertCount(1, $twigComponentConfig);
+        self::assertSame(
+            [
+                'anonymous_template_directory' => 'components/',
+                'defaults' => [],
+            ],
+            $twigComponentConfig[0]
+        );
+    }
 }
