@@ -68,7 +68,7 @@ final class MenuComponentTest extends TestCase
      *     array<string, mixed>
      * }>
      */
-    public function dataProviderForTestRender(): iterable
+    public static function dataProviderForTestRender(): iterable
     {
         yield 'default' => [
             self::EXAMPLE_MENU_NAME,

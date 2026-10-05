@@ -3,7 +3,6 @@ name: Browser tests
 on:
     push:
         branches:
-            - main
             - '[0-9]+.[0-9]+'
     pull_request: ~
 
@@ -13,7 +12,7 @@ jobs:
         uses: ibexa/gh-workflows/.github/workflows/browser-tests.yml@main
         with:
             project-edition: 'oss'
-            test-suite:  '--profile=browser --suite=twig-components --config=vendor/ibexa/twig-components/behat_suites.yaml'
+            test-suite:  '--profile=browser --suite=twig-components --config=vendor/ibexa/twig-components/behat_suites.php'
         secrets:
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
             AUTOMATION_CLIENT_ID: ${{ secrets.AUTOMATION_CLIENT_ID }}

@@ -24,7 +24,7 @@ final class ConfigurationTest extends TestCase
     /**
      * @return array<string, mixed>
      */
-    public function providerForTestProcessingConfiguration(): array
+    public static function providerForTestProcessingConfiguration(): array
     {
         return [
             'basic configuration' => [
@@ -189,7 +189,7 @@ final class ConfigurationTest extends TestCase
     /**
      * @return array<string, mixed>
      */
-    public function providerForTestProcessingInvalidConfiguration(): array
+    public static function providerForTestProcessingInvalidConfiguration(): array
     {
         return [
             'invalid type' => [

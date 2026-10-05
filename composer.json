@@ -12,14 +12,14 @@
         "ibexa/core": "~6.0.x-dev",
         "ibexa/design-engine": "~6.0.x-dev",
         "knplabs/knp-menu": "^3.8",
-        "symfony/asset": "^7.4",
-        "symfony/config": "^7.4",
-        "symfony/dependency-injection": "^7.4",
-        "symfony/event-dispatcher": "^7.4",
-        "symfony/http-foundation": "^7.4",
-        "symfony/http-kernel": "^7.4",
+        "symfony/asset": "^7.4 || ^8.1",
+        "symfony/config": "^7.4 || ^8.1",
+        "symfony/dependency-injection": "^7.4 || ^8.1",
+        "symfony/event-dispatcher": "^7.4 || ^8.1",
+        "symfony/http-foundation": "^7.4 || ^8.1",
+        "symfony/http-kernel": "^7.4 || ^8.1",
         "symfony/ux-twig-component": "^2.32",
-        "symfony/yaml": "^7.4"
+        "symfony/yaml": "^7.4 || ^8.1"
     },
     "require-dev": {
         "deptrac/deptrac": "^4",
@@ -29,13 +29,13 @@
         "ibexa/phpstan": "~6.0.x-dev",
         "ibexa/rector": "~6.0.x-dev",
         "ibexa/test-core": "~6.0.x-dev",
-        "matthiasnoback/symfony-config-test": "^4.3.0 || ^5.1",
-        "matthiasnoback/symfony-dependency-injection-test": "^4.3.1 || ^5.0",
+        "matthiasnoback/symfony-config-test": "^6.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^6.0",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
-        "phpunit/phpunit": "^9.0",
-        "symfony/form": "^7.4"
+        "phpunit/phpunit": "^11.5",
+        "symfony/form": "^7.4 || ^8.1"
     },
     "autoload": {
         "psr-4": {

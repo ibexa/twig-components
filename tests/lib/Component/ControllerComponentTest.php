@@ -33,9 +33,9 @@ final class ControllerComponentTest extends TestCase
         $httpKernel
             ->expects(self::once())
             ->method('handle')
-            ->with(self::callback(function (Request $subRequest): bool {
-                $this->assertSame('App\Controller\SomeController', $subRequest->attributes->get('_controller'));
-                $this->assertSame('bar', $subRequest->attributes->get('foo'));
+            ->with(self::callback(static function (Request $subRequest): bool {
+                self::assertSame('App\Controller\SomeController', $subRequest->attributes->get('_controller'));
+                self::assertSame('bar', $subRequest->attributes->get('foo'));
 
                 return true;
             }))
