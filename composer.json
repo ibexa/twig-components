@@ -8,7 +8,7 @@
         "ibexa-dxp"
     ],
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.5",
         "ibexa/core": "~6.0.x-dev",
         "ibexa/design-engine": "~6.0.x-dev",
         "knplabs/knp-menu": "^3.8",
