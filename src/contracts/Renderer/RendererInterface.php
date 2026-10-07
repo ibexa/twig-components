@@ -15,10 +15,17 @@ interface RendererInterface
      *
      * @return string[]
      */
-    public function renderGroup(string $groupName, array $parameters = []): array;
+    public function renderGroup(
+        string $groupName,
+        array $parameters = []
+    ): array;
 
     /**
      * @param array<mixed> $parameters
      */
-    public function renderSingle(string $groupName, string $name, array $parameters = []): string;
+    public function renderSingle(
+        string $groupName,
+        string $name,
+        array $parameters = []
+    ): string;
 }

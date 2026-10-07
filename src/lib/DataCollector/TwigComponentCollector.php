@@ -22,8 +22,11 @@ final class TwigComponentCollector extends DataCollector
     /** @var array<int, mixed> */
     private array $availableGroups = [];
 
-    public function addRenderedComponent(string $group, string $name, ComponentInterface $component): void
-    {
+    public function addRenderedComponent(
+        string $group,
+        string $name,
+        ComponentInterface $component
+    ): void {
         $componentClass = get_parent_class($component) ?: get_class($component);
 
         $this->renderedComponents[] = compact('group', 'name', 'componentClass');
@@ -34,8 +37,11 @@ final class TwigComponentCollector extends DataCollector
         $this->availableGroups[] = compact('group');
     }
 
-    public function collect(Request $request, Response $response, ?Throwable $exception = null): void
-    {
+    public function collect(
+        Request $request,
+        Response $response,
+        ?Throwable $exception = null
+    ): void {
         $this->data['rendered_components'] = $this->renderedComponents;
         $this->data['available_groups'] = $this->availableGroups;
     }

@@ -10,6 +10,4 @@ namespace Ibexa\Contracts\TwigComponents\Exception;
 
 use Ibexa\Contracts\Core\Exception\InvalidArgumentException as BaseInvalidArgumentException;
 
-final class InvalidArgumentException extends BaseInvalidArgumentException
-{
-}
+final class InvalidArgumentException extends BaseInvalidArgumentException {}

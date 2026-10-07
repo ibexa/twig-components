@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ibexa\TwigComponents\Component\Renderer;
 
+use Ibexa\Contracts\TwigComponents\ComponentInterface;
 use Ibexa\Contracts\TwigComponents\Event\RenderGroupEvent;
 use Ibexa\Contracts\TwigComponents\Event\RenderSingleEvent;
 use Ibexa\Contracts\TwigComponents\Exception\InvalidArgumentException;
@@ -34,8 +35,10 @@ final class DefaultRenderer implements RendererInterface
      *
      * @return string[]
      */
-    public function renderGroup(string $groupName, array $parameters = []): array
-    {
+    public function renderGroup(
+        string $groupName,
+        array $parameters = []
+    ): array {
         $this->eventDispatcher->dispatch(new RenderGroupEvent(
             $this->registry,
             $groupName,
@@ -55,8 +58,11 @@ final class DefaultRenderer implements RendererInterface
     /**
      * @param array<mixed> $parameters
      */
-    public function renderSingle(string $groupName, string $name, array $parameters = []): string
-    {
+    public function renderSingle(
+        string $groupName,
+        string $name,
+        array $parameters = []
+    ): string {
         $components = $this->registry->getComponents($groupName);
 
         return $this->renderSingleWithComponents($groupName, $name, $components, $parameters);
@@ -64,7 +70,7 @@ final class DefaultRenderer implements RendererInterface
 
     /**
      * @param array<mixed> $parameters
-     * @param array<string, \Ibexa\Contracts\TwigComponents\ComponentInterface> $components
+     * @param array<string, ComponentInterface> $components
      */
     private function renderSingleWithComponents(
         string $groupName,

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Ibexa\Contracts\TwigComponents\Event;
 
+use Ibexa\Contracts\TwigComponents\ComponentInterface;
 use Ibexa\Contracts\TwigComponents\ComponentRegistryInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -25,8 +26,11 @@ final class RenderGroupEvent extends Event
     /**
      * @param array<mixed> $parameters
      */
-    public function __construct(ComponentRegistryInterface $registry, string $groupName, array $parameters = [])
-    {
+    public function __construct(
+        ComponentRegistryInterface $registry,
+        string $groupName,
+        array $parameters = []
+    ) {
         $this->registry = $registry;
         $this->groupName = $groupName;
         $this->parameters = $parameters;
@@ -38,7 +42,7 @@ final class RenderGroupEvent extends Event
     }
 
     /**
-     * @return \Ibexa\Contracts\TwigComponents\ComponentInterface[]
+     * @return ComponentInterface[]
      */
     public function getComponents(): array
     {
@@ -46,7 +50,7 @@ final class RenderGroupEvent extends Event
     }
 
     /**
-     * @param \Ibexa\Contracts\TwigComponents\ComponentInterface[] $components
+     * @param ComponentInterface[] $components
      */
     public function setComponents(array $components): void
     {
@@ -64,8 +68,10 @@ final class RenderGroupEvent extends Event
     /**
      * @param mixed $value
      */
-    public function addParameter(string $key, $value): void
-    {
+    public function addParameter(
+        string $key,
+        $value
+    ): void {
         $this->parameters[$key] = $value;
     }
 
