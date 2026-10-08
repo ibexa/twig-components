@@ -14,25 +14,28 @@ use Ibexa\Contracts\TwigComponents\ComponentRegistryInterface;
 final class Registry implements ComponentRegistryInterface
 {
     /**
-     * @var array<string, array<\Ibexa\Contracts\TwigComponents\ComponentInterface>>
+     * @var array<string, array<ComponentInterface>>
      */
     private array $components;
 
     /**
-     * @param array<string, array<\Ibexa\Contracts\TwigComponents\ComponentInterface>> $components
+     * @param array<string, array<ComponentInterface>> $components
      */
     public function __construct(array $components = [])
     {
         $this->components = $components;
     }
 
-    public function addComponent(string $group, string $serviceId, ComponentInterface $component): void
-    {
+    public function addComponent(
+        string $group,
+        string $serviceId,
+        ComponentInterface $component
+    ): void {
         $this->components[$group][$serviceId] = $component;
     }
 
     /**
-     * @return \Ibexa\Contracts\TwigComponents\ComponentInterface[]
+     * @return ComponentInterface[]
      */
     public function getComponents(string $group): array
     {
@@ -40,10 +43,12 @@ final class Registry implements ComponentRegistryInterface
     }
 
     /**
-     * @param \Ibexa\Contracts\TwigComponents\ComponentInterface[] $components
+     * @param ComponentInterface[] $components
      */
-    public function setComponents(string $group, array $components): void
-    {
+    public function setComponents(
+        string $group,
+        array $components
+    ): void {
         $this->components[$group] = $components;
     }
 }

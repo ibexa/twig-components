@@ -10,15 +10,22 @@ namespace Ibexa\Contracts\TwigComponents;
 
 interface ComponentRegistryInterface
 {
-    public function addComponent(string $group, string $serviceId, ComponentInterface $component): void;
+    public function addComponent(
+        string $group,
+        string $serviceId,
+        ComponentInterface $component
+    ): void;
 
     /**
-     * @return \Ibexa\Contracts\TwigComponents\ComponentInterface[]
+     * @return ComponentInterface[]
      */
     public function getComponents(string $group): array;
 
     /**
-     * @param \Ibexa\Contracts\TwigComponents\ComponentInterface[] $components
+     * @param ComponentInterface[] $components
      */
-    public function setComponents(string $group, array $components): void;
+    public function setComponents(
+        string $group,
+        array $components
+    ): void;
 }
