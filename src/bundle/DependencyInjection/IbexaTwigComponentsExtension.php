@@ -41,8 +41,10 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
     /**
      * @param array<string, mixed> $configs
      */
-    public function load(array $configs, ContainerBuilder $container): void
-    {
+    public function load(
+        array $configs,
+        ContainerBuilder $container
+    ): void {
         $loader = new YamlFileLoader(
             $container,
             new FileLocator(__DIR__ . '/../Resources/config')
@@ -103,8 +105,10 @@ final class IbexaTwigComponentsExtension extends Extension implements PrependExt
     /**
      * @param array<string, mixed> $config
      */
-    private function registerConfiguredComponents(array $config, ContainerBuilder $container): void
-    {
+    private function registerConfiguredComponents(
+        array $config,
+        ContainerBuilder $container
+    ): void {
         foreach ($config as $group => $components) {
             foreach ($components as $name => $componentConfig) {
                 $type = $componentConfig['type'] ?? null;
