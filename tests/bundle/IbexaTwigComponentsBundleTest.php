@@ -31,9 +31,10 @@ final class IbexaTwigComponentsBundleTest extends TestCase
     {
         $container = new ContainerBuilder();
         $container->registerExtension(new class() extends Extension {
-            public function load(array $configs, ContainerBuilder $container): void
-            {
-            }
+            public function load(
+                array $configs,
+                ContainerBuilder $container
+            ): void {}
 
             public function getAlias(): string
             {
@@ -53,9 +54,10 @@ final class IbexaTwigComponentsBundleTest extends TestCase
     {
         $container = new ContainerBuilder();
         $container->registerExtension(new class() extends Extension {
-            public function load(array $configs, ContainerBuilder $container): void
-            {
-            }
+            public function load(
+                array $configs,
+                ContainerBuilder $container
+            ): void {}
 
             public function getAlias(): string
             {
@@ -63,9 +65,10 @@ final class IbexaTwigComponentsBundleTest extends TestCase
             }
         });
         $container->registerExtension(new class() extends Extension {
-            public function load(array $configs, ContainerBuilder $container): void
-            {
-            }
+            public function load(
+                array $configs,
+                ContainerBuilder $container
+            ): void {}
 
             public function getAlias(): string
             {
