@@ -241,8 +241,10 @@ final class ConfigurationTest extends TestCase
      *
      * @param array<string, mixed> $configurationValues
      */
-    public function testProcessingInvalidConfiguration(array $configurationValues, string $expectedMessage): void
-    {
+    public function testProcessingInvalidConfiguration(
+        array $configurationValues,
+        string $expectedMessage
+    ): void {
         $this->assertConfigurationIsInvalid(
             $configurationValues,
             $expectedMessage

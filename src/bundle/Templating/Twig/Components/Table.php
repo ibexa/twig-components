@@ -68,8 +68,10 @@ final class Table
      * @param iterable<object>|null $fullData whole dataset the rendered rows were taken from;
      *        lets listeners decide whether their column applies independently of pagination
      */
-    public function mount(iterable $data = [], ?iterable $fullData = null): void
-    {
+    public function mount(
+        iterable $data = [],
+        ?iterable $fullData = null
+    ): void {
         if ($data !== []) {
             $this->data = $data;
         }
@@ -198,8 +200,10 @@ final class Table
         return $inferredType;
     }
 
-    public function renderCell(Column $column, mixed $item): string
-    {
+    public function renderCell(
+        Column $column,
+        mixed $item
+    ): string {
         return ($column->renderer)($item, $column);
     }
 

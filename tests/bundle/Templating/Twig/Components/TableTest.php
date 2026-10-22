@@ -84,8 +84,10 @@ final class TableTest extends TestCase
      * @param array{header_class?: string, cell_class?: string}|null $options null = argument omitted
      * @param array{header_class?: string, cell_class?: string} $expectedOptions
      */
-    public function testAddColumnCarriesOptionsToColumn(?array $options, array $expectedOptions): void
-    {
+    public function testAddColumnCarriesOptionsToColumn(
+        ?array $options,
+        array $expectedOptions
+    ): void {
         $table = new Table();
         if ($options === null) {
             $table->addColumn(

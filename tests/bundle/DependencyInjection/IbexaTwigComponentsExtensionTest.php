@@ -23,9 +23,10 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
         parent::setUp();
 
         $this->container->registerExtension(new class() extends Extension {
-            public function load(array $configs, ContainerBuilder $container): void
-            {
-            }
+            public function load(
+                array $configs,
+                ContainerBuilder $container
+            ): void {}
 
             public function getAlias(): string
             {
@@ -34,9 +35,10 @@ final class IbexaTwigComponentsExtensionTest extends AbstractExtensionTestCase
         });
 
         $this->container->registerExtension(new class() extends Extension {
-            public function load(array $configs, ContainerBuilder $container): void
-            {
-            }
+            public function load(
+                array $configs,
+                ContainerBuilder $container
+            ): void {}
 
             public function getAlias(): string
             {

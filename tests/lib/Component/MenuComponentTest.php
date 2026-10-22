@@ -44,7 +44,7 @@ final class MenuComponentTest extends TestCase
     ): void {
         $twig = $this->createMock(Environment::class);
         $twig
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('render')
             ->with(
                 '@ibexadesign/twig_components/menu.html.twig',
