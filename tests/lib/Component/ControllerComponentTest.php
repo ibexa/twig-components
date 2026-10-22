@@ -31,7 +31,7 @@ final class ControllerComponentTest extends TestCase
 
         $httpKernel = $this->createMock(HttpKernelInterface::class);
         $httpKernel
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('handle')
             ->with(self::callback(static function (Request $subRequest): bool {
                 self::assertSame('App\Controller\SomeController', $subRequest->attributes->get('_controller'));

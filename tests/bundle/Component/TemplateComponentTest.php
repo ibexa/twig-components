@@ -79,7 +79,7 @@ final class TemplateComponentTest extends TestCase
     private function configureTwig(array $parameters): Environment
     {
         $twig = $this->createMock(Environment::class);
-        $twig->expects(self::once())
+        $twig->expects($this->once())
             ->method('render')
             ->with(
                 '__template__',
