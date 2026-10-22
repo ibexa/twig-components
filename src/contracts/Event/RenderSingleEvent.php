@@ -73,8 +73,10 @@ final class RenderSingleEvent extends Event
     /**
      * @param mixed $value
      */
-    public function addParameter(string $key, $value): void
-    {
+    public function addParameter(
+        string $key,
+        $value
+    ): void {
         $this->parameters[$key] = $value;
     }
 

@@ -264,8 +264,11 @@ final class TableTest extends IbexaKernelTestCase
      *
      * @return TResult
      */
-    private function withListener(string $eventClass, \Closure $listener, \Closure $render): mixed
-    {
+    private function withListener(
+        string $eventClass,
+        \Closure $listener,
+        \Closure $render
+    ): mixed {
         $dispatcher = self::getIbexaTestCore()->getServiceByClassName(EventDispatcherInterface::class);
         $dispatcher->addListener($eventClass, $listener);
 
@@ -276,8 +279,10 @@ final class TableTest extends IbexaKernelTestCase
         }
     }
 
-    private function assertMatchesSnapshot(string $actual, string $snapshotName): void
-    {
+    private function assertMatchesSnapshot(
+        string $actual,
+        string $snapshotName
+    ): void {
         $snapshotPath = __DIR__ . '/__snapshots__/' . $snapshotName . '.html';
 
         if (!file_exists($snapshotPath)) {

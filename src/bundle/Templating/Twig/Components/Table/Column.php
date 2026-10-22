@@ -29,6 +29,5 @@ final readonly class Column
         public int $priority = 0,
         /** @var ColumnOptions */
         public array $options = [],
-    ) {
-    }
+    ) {}
 }

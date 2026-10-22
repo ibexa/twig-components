@@ -13,6 +13,5 @@ final readonly class VersionRow
     public function __construct(
         public int $versionNo,
         public bool $canDelete,
-    ) {
-    }
+    ) {}
 }

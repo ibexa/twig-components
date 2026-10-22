@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Ibexa\Tests\Bundle\TwigComponents\Component;
 
 use Ibexa\TwigComponents\Component\TemplateComponent;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 
@@ -73,7 +74,7 @@ final class TemplateComponentTest extends TestCase
     /**
      * @param array<mixed> $parameters
      *
-     * @return \Twig\Environment|\PHPUnit\Framework\MockObject\MockObject
+     * @return Environment|MockObject
      */
     private function configureTwig(array $parameters): Environment
     {
